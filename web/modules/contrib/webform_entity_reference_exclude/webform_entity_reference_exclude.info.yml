@@ -1,0 +1,12 @@
+name: 'Webform Entity Reference Exclude field widget'
+type: module
+description: 'Provides a webform entity reference field widget, that allows excluding certain webforms from being selectable.'
+core_version_requirement: ^10.2 || ^11
+package: 'Webform'
+dependencies:
+  - webform:webform
+
+# Information added by Drupal.org packaging script on 2025-06-02
+version: '1.0.2'
+project: 'webform_entity_reference_exclude'
+datestamp: 1748870272

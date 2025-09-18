@@ -1,0 +1,13 @@
+{
+    "name": "drupal/webform_entity_reference_exclude",
+    "description": "Provides a webform entity reference field widget, that allows excluding certain webforms from being selectable.",
+    "type": "drupal-module",
+    "homepage": "https://www.drupal.org/project/webform_entity_reference_exclude",
+    "license": "GPL-2.0+",
+    "require": {
+        "drupal/webform": "^6.2"
+    },
+    "require-dev": {
+        "drupal/webform": "^6.2"
+    }
+}

@@ -1,0 +1,22 @@
+field.widget.settings.webform_entity_reference_exclude_select:
+  type: mapping
+  label: "Webform entity reference exclude field widget"
+  mapping:
+    default_data:
+      type: boolean
+      label: 'Default submission data'
+    webforms:
+      type: sequence
+      label: 'Webforms'
+      sequence:
+        type: string
+        label: 'Webform ID'
+    excluded_webforms:
+      type: sequence
+      label: 'Excluded webforms'
+      sequence:
+        type: string
+        label: 'Webform ID'
+    excluded_webform_categories:
+      type: string
+      label: 'Excluded webform categories'
