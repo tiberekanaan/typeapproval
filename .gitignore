@@ -1,0 +1,9 @@
+data/
+recipes/
+vendor/
+web/core/
+web/libraries/
+web/themes/contrib/
+web/modules/contrib/
+web/sites/default/files/
+web/sites/default/settings.php
