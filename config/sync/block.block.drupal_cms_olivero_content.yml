@@ -1,0 +1,22 @@
+uuid: 3445385a-f820-4dfc-8d75-e1c6bb7ec406
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - drupal_cms_olivero
+_core:
+  default_config_hash: G4iNGvy_k2yNIEH_FJmbkvgBBar1etJIhKJYuygT7hU
+id: drupal_cms_olivero_content
+theme: drupal_cms_olivero
+region: content
+weight: -5
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

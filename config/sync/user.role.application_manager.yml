@@ -1,0 +1,9 @@
+uuid: 4adf37c8-a01c-4b64-afcd-d3ca433b03e6
+langcode: en
+status: true
+dependencies: {  }
+id: application_manager
+label: 'Application Manager'
+weight: 5
+is_admin: false
+permissions: {  }

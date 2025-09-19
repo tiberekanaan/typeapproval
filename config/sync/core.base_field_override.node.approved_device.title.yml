@@ -1,0 +1,18 @@
+uuid: 38f9fb7d-58da-4da4-a09d-c84b04b078d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.approved_device
+id: node.approved_device.title
+field_name: title
+entity_type: node
+bundle: approved_device
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

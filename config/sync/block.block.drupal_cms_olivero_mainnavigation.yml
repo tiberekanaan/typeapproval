@@ -1,0 +1,25 @@
+uuid: 58b97c7b-da6c-4e0b-9124-fc3cde14d8fc
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - drupal_cms_olivero
+id: drupal_cms_olivero_mainnavigation
+theme: drupal_cms_olivero
+region: primary_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

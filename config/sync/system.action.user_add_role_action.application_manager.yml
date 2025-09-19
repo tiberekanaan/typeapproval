@@ -1,0 +1,14 @@
+uuid: b2d15224-6ac9-4e38-9a8b-98b1c143ec67
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.application_manager
+  module:
+    - user
+id: user_add_role_action.application_manager
+label: 'Add the Application Manager role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: application_manager

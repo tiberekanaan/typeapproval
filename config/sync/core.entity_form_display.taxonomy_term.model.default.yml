@@ -1,0 +1,55 @@
+uuid: bed421f8-679a-4ce0-8f8a-2d586cb4782c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.model.field_manufacturer
+    - taxonomy.vocabulary.model
+  module:
+    - path
+    - tagify
+id: taxonomy_term.model.default
+targetEntityType: taxonomy_term
+bundle: model
+mode: default
+content:
+  field_manufacturer:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  publish_on: true
+  publish_state: true
+  unpublish_on: true
+  unpublish_state: true

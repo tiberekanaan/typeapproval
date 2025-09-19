@@ -1,0 +1,29 @@
+uuid: 3b6fc410-4b55-4b6b-92df-9d59e5ac4a1f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_type_of_device
+    - node.type.approved_device
+    - taxonomy.vocabulary.type_of_device
+id: node.approved_device.field_type_of_device
+field_name: field_type_of_device
+entity_type: node
+bundle: approved_device
+label: 'Type of Device'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      type_of_device: type_of_device
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

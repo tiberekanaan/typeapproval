@@ -1,0 +1,29 @@
+uuid: e376cb79-33d1-44f6-b62e-3aee0abe07ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_manufacturer
+    - node.type.approved_device
+    - taxonomy.vocabulary.brand
+id: node.approved_device.field_manufacturer
+field_name: field_manufacturer
+entity_type: node
+bundle: approved_device
+label: Manufacturer
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      brand: brand
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

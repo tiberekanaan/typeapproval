@@ -1,0 +1,48 @@
+uuid: b6dc55cf-1775-47b2-b2f1-4f75e6b8f45d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.approved_device.field_manufacturer
+    - field.field.node.approved_device.field_model
+    - field.field.node.approved_device.field_original_registrant
+    - field.field.node.approved_device.field_type_of_device
+    - node.type.approved_device
+  module:
+    - user
+id: node.approved_device.default
+targetEntityType: node
+bundle: approved_device
+mode: default
+content:
+  field_manufacturer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_model:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_type_of_device:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_original_registrant: true

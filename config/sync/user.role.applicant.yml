@@ -1,0 +1,9 @@
+uuid: 7c69a474-2c2f-422f-af4b-d3bdc94ec4ed
+langcode: en
+status: true
+dependencies: {  }
+id: applicant
+label: Applicant
+weight: 4
+is_admin: false
+permissions: {  }

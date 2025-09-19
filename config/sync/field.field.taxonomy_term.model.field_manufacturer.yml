@@ -1,0 +1,29 @@
+uuid: e789735d-31f1-439d-9c8d-823ab5a851b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_manufacturer
+    - taxonomy.vocabulary.brand
+    - taxonomy.vocabulary.model
+id: taxonomy_term.model.field_manufacturer
+field_name: field_manufacturer
+entity_type: taxonomy_term
+bundle: model
+label: Manufacturer
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      brand: brand
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

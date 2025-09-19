@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8daa0f3d-7869-4fc6-949f-023e3ff32065" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/sites/default/settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/sites/default/settings.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -371,7 +372,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1758274462326</updated>
-      <workItem from="1758274463408" duration="2786000" />
+      <workItem from="1758274463408" duration="2926000" />
     </task>
     <servers />
   </component>
