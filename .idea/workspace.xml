@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8daa0f3d-7869-4fc6-949f-023e3ff32065" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerConfigs">
+    <option name="configs">
+      <option value="$PROJECT_DIR$/web/modules/contrib/ai_provider_openai/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_authentication/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/FileCache/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/symfony_mailer_lite/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/PhpStorage/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/entity_print/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/empty-fixture/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_starter/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/focal_point/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/address/composer.json" />
+      <option value="$PROJECT_DIR$/web/libraries/friendly-challenge/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/build_test_projects/alpha/1.0.0/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/robotstxt/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_remote_video/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/project_browser/tests/fixtures/test_recipe/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/redirect/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/project-with-empty-scaffold-path/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/composer-plugin-implements-scaffold-events/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/project-with-illegal-dir-scaffold/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/project_browser/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/automatic_updates/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/build_test_projects/alpha/1.1.0/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/empty-fixture-allowing-core/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/linkit/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/geofield/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/system/tests/fixtures/HtaccessTest/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/empty-file/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/path_repos/cweagans--composer-patches/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/autocomplete_deluxe/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/scheduler/scheduler_rules_integration/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/captcha/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Version/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/geocoder/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/easy_email/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/sam/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/scaffold-override-fixture/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/seo_checklist/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_news/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/path_repos/drupal--core-dev/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/addtocal_augment/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/search_api/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/eca/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/path_repos/drupal--core-recommended/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Serialization/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/webform/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/token/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/crop/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/automatic_updates/automatic_updates_extensions/tests/fixtures/new_module/1.1.0/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/metatag/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/webform_entity_reference_exclude/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Gettext/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/ClassFinder/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/menu_link_attributes/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/recipes/composer-recipe-b/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_search/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_events/composer.json" />
+      <option value="$PROJECT_DIR$/web/libraries/nouislider/composer.json" />
+      <option value="$PROJECT_DIR$/web/libraries/klaro/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/webform_views/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/google_tag/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/dashboard/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/FileSystem/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/build_test_projects/main_module/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_case_study/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/modeler_api/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/search_api_autocomplete/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/fillpdf/tests/modules/fillpdf_test/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Graph/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/easy_email_express/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_accessibility_tools/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/checklistapi/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/ai/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Uuid/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/drupal-core-fixture/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/scheduler_content_moderation_integration/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/recipes/composer-recipe-d/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Transliteration/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/klaro/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/modules/composer-module-b/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Discovery/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/themes/composer-theme-a/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/friendlycaptcha/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/search_api_exclude/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/trash/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_admin_ui/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Diff/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/ProxyBuilder/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/path_repos/drupal--core/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_content_type_base/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/login_emailusername/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/build_test_projects/updated_module/1.1.0/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/seo_checklist/modules/seo_checklist_optional_modules/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/yoast_seo/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/leaflet/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/fillpdf/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/ctools/composer.json" />
+      <option value="$PROJECT_DIR$/web/themes/contrib/drupal_cms_olivero/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Render/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/honeypot/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/autosave_form/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/gin_toolbar/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/project_browser/tests/fixtures/recipe_with_tasks/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/svg_image/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_privacy_basic/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_ai/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/easy_breadcrumb/composer.json" />
+      <option value="$PROJECT_DIR$/web/themes/contrib/gin/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/composer.json" />
+      <option value="$PROJECT_DIR$/web/libraries/rtseo.js/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/tagify/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/scheduler/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/custom/package/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/FrontMatter/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Scaffold/fixtures/drupal-assets-fixture/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_anti_spam/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/HttpFoundation/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/jquery_ui_resizable/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/modules/composer-module-a/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/bpmn_io/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_google_analytics/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Assertion/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/easy_email_standard/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Utility/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/recipes/composer-recipe-a/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_page/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Datetime/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/ai_provider_anthropic/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_seo_basic/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/checklistapi/checklistapiexample/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_blog/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/easy_email_text_format/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Annotation/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/easy_email_types_default/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/Plugin/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/ai_image_alt_text/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/fillpdf/tests/modules/fillpdf_webform_test/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/automatic_updates/automatic_updates_extensions/tests/fixtures/new_module/1.0.0/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/key/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/build_test_projects/updated_module/1.0.0/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/editoria11y/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/token_or/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/add_content_by_bundle/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_seo_tools/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/webform/modules/webform_scheduled_email/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/sitemap/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_forms/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/smart_date/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_person/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/coffee/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_image/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/FileSecurity/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/mailsystem/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/field_group/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/Drupal/Tests/Composer/Plugin/Unpack/fixtures/recipes/composer-recipe-c/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/tests/PHPStan/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/drupal_cms_project/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/EventDispatcher/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/path_repos/main_module_submodule/composer.json" />
+      <option value="$PROJECT_DIR$/web/core/lib/Drupal/Component/DependencyInjection/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/telephone_validation/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/ai_agents/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/selective_better_exposed_filters/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/better_exposed_filters/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/simple_sitemap/composer.json" />
+      <option value="$PROJECT_DIR$/recipes/easy_email_types_core/composer.json" />
+      <option value="$PROJECT_DIR$/web/modules/contrib/pathauto/composer.json" />
+    </option>
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/drupal/core-recommended" />
+      <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/drupal/core-dev" />
+      <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/drupal/core" />
+      <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/composer" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="32udbWWnoLSed21Whu2WJXA5Pr6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "prod",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "//wsl.localhost/Ubuntu/home/sonvh/typeapproval",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="ComposerRunConfigurationType" factoryName="Composer Script">
+      <option name="pathToComposerJson" value="$PROJECT_DIR$/composer.json" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
+        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8daa0f3d-7869-4fc6-949f-023e3ff32065" name="Changes" comment="" />
+      <created>1758274462326</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758274462326</updated>
+      <workItem from="1758274463408" duration="1379000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
