@@ -1,0 +1,11 @@
+typeapproval_release.generate_pdf:
+  path: '/webform-submission/{webform_submission}/release-pdf'
+  defaults:
+    _controller: '\Drupal\typeapproval_release\Controller\ReleasePdfController::generate'
+    _title: 'Generate Release PDF'
+  requirements:
+    _entity_access: 'webform_submission.view'
+  options:
+    parameters:
+      webform_submission:
+        type: entity:webform_submission

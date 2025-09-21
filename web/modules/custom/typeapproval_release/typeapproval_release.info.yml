@@ -1,0 +1,7 @@
+name: 'Type Approval Release'
+type: module
+description: 'Adds a button to generate a Release Form PDF for approved Type Approval applications.'
+core_version_requirement: '^10 || ^11'
+package: 'Custom'
+dependencies:
+  - drupal:webform

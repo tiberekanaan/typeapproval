@@ -1,0 +1,64 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_theme().
+ */
+function typeapproval_release_theme($existing, $type, $theme, $path) {
+  return [
+    'typeapproval_release_pdf' => [
+      'variables' => [
+        'webform_submission' => NULL,
+        'applicant' => [],
+        'device' => [],
+        'status' => '',
+        'generated_on' => '',
+        'assets' => [],
+      ],
+      'template' => 'typeapproval-release-pdf',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_webform_submission_view_alter().
+ */
+function typeapproval_release_webform_submission_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  // Only add button for the target webform.
+  if (method_exists($entity, 'getWebform')) {
+    $webform = $entity->getWebform();
+    if (!$webform || $webform->id() !== 'type_approval_application_form') {
+      return;
+    }
+  }
+  else {
+    return;
+  }
+
+  if (!$entity->access('view')) {
+    return;
+  }
+
+  $url = Url::fromRoute('typeapproval_release.generate_pdf', [
+    'webform_submission' => $entity->id(),
+  ]);
+
+  $link = [
+    '#type' => 'link',
+    '#title' => t('Generate Release PDF'),
+    '#url' => $url,
+    '#attributes' => [
+      'class' => ['button', 'button--primary'],
+    ],
+  ];
+
+  if (isset($build['actions']) && is_array($build['actions'])) {
+    $build['actions']['typeapproval_release_pdf'] = $link;
+  }
+  else {
+    $build['typeapproval_release_pdf'] = $link;
+  }
+}

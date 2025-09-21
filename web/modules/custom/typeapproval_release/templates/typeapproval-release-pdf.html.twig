@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+  <title>Release Form</title>
+  <style>
+    /* Ensure strict A4 size for print/PDF */
+    @page { size: A4 portrait; margin: 12.7mm; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Cambria, Georgia, "Times New Roman", Times, serif; font-size: 12pt; color: #222; }
+    .header { position: relative; padding-right: 35mm; }
+    /* Position logo at top-right for Dompdf compatibility */
+    .logo { position: absolute; top: -5mm; right: 0; height: 30mm; }
+
+    .page { position: relative; padding: 5mm 12.7mm 12.7mm 25mm; box-sizing: border-box; min-height: calc(297mm - 25.4mm); }
+    /* .logo height defined above with absolute positioning */
+    .org { text-align: center; line-height: 1.4; margin-top: 2mm; }
+    .org .name { font-size: 16pt; font-weight: 700; letter-spacing: 0.2px; }
+    .org .meta { font-size: 11pt; margin-bottom: 10px; }
+    .org .links { font-size: 11pt; }
+
+    .title-row { margin-top: 6mm; position: relative; text-align: center; padding-right: 35mm; }
+    .title-box { display: inline-block; font-weight: 700; font-size: 18pt; margin-top: 15px; }
+    .relno { font-size: 11pt; position: absolute; right: 0; top: 5px; }
+    .relno .box { display: inline-block; border: 1px solid #000; padding: 3px 10px; min-width: 28mm; text-align: left; }
+
+    .row { margin-top: 6mm; font-size: 11pt; }
+    .label { margin-right: 2mm; }
+    .check { display: inline-block; width: 6mm; height: 6mm; border: 1px solid #000; vertical-align: middle; margin: 0 2mm; }
+    .line { display: inline-block; border: 1px solid #999; height: 7mm; min-width: 40mm; vertical-align: middle; padding: 0 2mm; box-sizing: border-box; }
+    .wide { min-width: 55mm; }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 4mm; }
+    th, td { border: 1px solid #000; padding: 5px; vertical-align: top; word-wrap: break-word; }
+    th { background: #f7f7f7; text-align: left; }
+    th.no, td.no { width: 5mm; text-align: center; }
+    th.qty, td.qty { width: 5mm; text-align: center; }
+
+    .signature { position: absolute; bottom: 12.7mm; }
+    .seal { height: 42mm; }
+
+    @media print {
+      html, body { margin: 0; padding: 0; }
+      .page { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="org">
+      <div class="name">COMMUNICATIONS COMMISSION OF KIRIBATI</div>
+      <div class="meta">P.O Box 529, Betio, Tarawa, Republic of Kiribati</div>
+      <div class="links">
+        <strong>Website:</strong> <a href="https://www.cck.ki">www.cck.ki</a> &nbsp; | &nbsp; <strong>Email:</strong>
+        <a href="mailto:enquiry@cck.ki">enquiry@cck.ki</a> &nbsp; | &nbsp; <strong><span style="font-family: DejaVu Sans,serif;">&#9742;</span></strong>: 75125488 | 75125431
+      </div>
+    </div>
+    {% if assets.logo_image %}
+      <img src="{{ assets.logo_image }}" class="logo" alt="Logo"/>
+    {% endif %}
+  </div>
+
+  <div class="title-row">
+    <div style="text-align:center;">
+      <span class="title-box">RELEASE FORM</span>
+    </div>
+    <div class="relno"><span class="box"><strong>Release Num:</strong>&nbsp;{{ webform_submission.id() }}</span></div>
+  </div>
+
+  <div class="row">
+    <div style="margin-bottom: 10px;">
+      <span class="label">Custom: (<span style="font-family: DejaVu Sans,serif;">&#8730;</span>)</span>
+    </div>
+    Betio <span class="check"></span>
+    Bonriki <span class="check"></span>
+    Others <span class="check"></span>
+    <span class="label" style="margin-left:4mm;">If others please specify:</span>
+    <span class="line wide"></span>
+  </div>
+
+  <div class="row">Date: {{ "now"|date('j F Y') }}</div>
+
+  <div class="row" style="margin-top:8mm;">Owner's name: {{ applicant.full_name ?: applicant.organization }}</div>
+  <div class="row">Address: {{ applicant.physical_address }}</div>
+  <div class="row">Contact Phone/Email: {{ applicant.telephone }}{% if applicant.telephone and applicant.email_address %} / {% endif %}{{ applicant.email_address }}</div>
+
+  <div class="row" style="margin-top:8mm;">Brief Description of Equipments:</div>
+  <table>
+    <thead>
+    <tr>
+      <th class="no">No.</th>
+      <th>Description of Equipment</th>
+      <th class="qty">Qty</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set rows_to_show = 6 %}
+    {% set first_desc = device.product_name ?: device.model ?: device.type_of_device %}
+    {% set first_qty = device.quantity_of_device %}
+    {% for i in 1..rows_to_show %}
+      <tr>
+        <td class="no">{{ i }}</td>
+        <td>
+          {% if i == 1 %}
+            {% if first_desc %}
+              {{ first_desc }}{% if device.manufacturer %} ({{ device.manufacturer }}){% endif %}
+            {% else %}&nbsp;{% endif %}
+          {% else %}&nbsp;{% endif %}
+        </td>
+        <td class="qty">{% if i == 1 and first_qty %}{{ first_qty }}{% else %}&nbsp;{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="signature">
+    {% if assets.sign_image %}
+      <img src="{{ assets.sign_image }}" class="seal" alt="Seal/Signature"/>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>
