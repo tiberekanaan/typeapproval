@@ -92,6 +92,7 @@ module:
   text: 0
   token: 0
   trash: 0
+  typeapproval_release: 0
   update: 0
   user: 0
   views_ui: 0
