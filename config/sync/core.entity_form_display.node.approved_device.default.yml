@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.approved_device.field_manufacturer
-    - field.field.node.approved_device.field_model
     - field.field.node.approved_device.field_original_registrant
     - field.field.node.approved_device.field_type_of_device
     - node.type.approved_device
@@ -19,7 +18,7 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 5
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -29,14 +28,61 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 0
       placeholder: ''
       suggestions_dropdown: 1
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
     third_party_settings: {  }
-  field_model:
+  field_original_registrant:
+    type: string_textfield
+    weight: 11
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_type_of_device:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 10
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
     type: string_textfield
     weight: 2
     region: content
@@ -44,71 +90,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_original_registrant:
-    type: string_textfield
-    weight: 12
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_type_of_device:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 0
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      placeholder: ''
-      suggestions_dropdown: 1
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-    third_party_settings: {  }
-  moderation_state:
-    type: moderation_state_default
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  path:
-    type: path
-    weight: 8
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  promote:
-    type: boolean_checkbox
-    weight: 6
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 11
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  sticky:
-    type: boolean_checkbox
-    weight: 7
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  title:
-    type: string_textfield
-    weight: 3
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 4
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS
@@ -117,7 +101,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 9
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }

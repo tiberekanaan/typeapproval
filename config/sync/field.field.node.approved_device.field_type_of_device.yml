@@ -10,7 +10,7 @@ id: node.approved_device.field_type_of_device
 field_name: field_type_of_device
 entity_type: node
 bundle: approved_device
-label: 'Type of Device'
+label: 'Type of Equipment'
 description: ''
 required: false
 translatable: false

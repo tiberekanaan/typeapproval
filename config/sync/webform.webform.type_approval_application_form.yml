@@ -129,11 +129,12 @@ elements: |-
         '#type': select
         '#title': 'Type of Device'
         '#options':
-          Smartphone: Smartphone
-          Tablet: Tablet
-          Laptop: Laptop
-          Satellite: Satellite
-          'Radio Transceiver': 'Radio Transceiver'
+          'Broadband Terminal Equipment': 'Broadband Terminal Equipment'
+          'Fixed Telecommunications Equipment': 'Fixed Telecommunications Equipment'
+          'Fixed Wireless Terminal Equipment': 'Fixed Wireless Terminal Equipment'
+          'IoT and Smart Devices': 'IoT and Smart Devices'
+          'Automotive Communication and Infotainment Equipment': 'Automotive Communication and Infotainment Equipment'
+          'Radio and Wireless Communication Equipment': 'Radio and Wireless Communication Equipment'
     flexbox_03:
       '#type': webform_flexbox
       manufacturer:
@@ -146,9 +147,6 @@ elements: |-
         '#description': '<p>E.g. iPhone 13 Pro Max, Samsung Galaxy S9 etc</p>'
     flexbox_04:
       '#type': webform_flexbox
-      product_name:
-        '#type': textfield
-        '#title': 'Product Name'
       origin:
         '#type': textfield
         '#title': Origin
@@ -220,12 +218,12 @@ elements: |-
         '#title': 'Quantity of Device'
       custom_entry_point:
         '#type': select
-        '#title': 'Custom Entry Point'
+        '#title': 'Location of Parcel'
         '#options':
-          DHL: DHL
-          'Postal Office': 'Postal Office'
-          'Bonriki Airport': 'Bonriki Airport'
-          'Betio Port': 'Betio Port'
+          'Customs Betio': 'Customs Betio'
+          'Customs Bonriki': 'Customs Bonriki'
+          'DHL Tobaraoi': 'DHL Tobaraoi'
+          'Postal Office Bairiki': 'Postal Office Bairiki'
   supporting_documents:
     '#type': webform_section
     '#title': 'Supporting Documents'
@@ -238,20 +236,36 @@ elements: |-
       declaration_of_conformity_certificate:
         '#type': webform_document_file
         '#title': 'Declaration of Conformity / Certificate'
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#max_filesize': '25'
     flexbox_08:
       '#type': webform_flexbox
       copy_of_labeling_marking:
         '#type': webform_document_file
         '#title': 'Copy of Labeling / Marking'
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#max_filesize': '25'
       operating_manual_catalogue:
         '#type': webform_document_file
         '#title': 'Operating Manual / Catalogue'
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#max_filesize': '25'
     description_of_repair_services_in_kiribati:
       '#type': textarea
       '#title': 'Description of Repair Services in Kiribati'
+      '#states':
+        visible:
+          ':input[name="type_of_applicant"]':
+            value: 'Local Customer'
   admin_action:
     '#type': webform_section
     '#title': 'Admin Action'
@@ -267,21 +281,47 @@ elements: |-
         'Need Review': 'Need Review'
         Approved: Approved
         Rejected: Rejected
-      '#default_value': 'Under Review'
+      '#default_value': 'Need Review'
       '#access_create_roles': {  }
       '#access_update_roles':
-        - authenticated
+        - administrator
+        - application_manager
       '#access_view_roles':
-        - authenticated
-    total_fee:
-      '#type': number
-      '#title': 'Total Fee'
-      '#field_prefix': $
+        - administrator
+        - application_manager
+    reason_for_rejection:
+      '#type': textarea
+      '#title': 'Reason for rejection'
+      '#states':
+        visible:
+          ':input[name="status"]':
+            value: Rejected
       '#access_create_roles': {  }
       '#access_update_roles':
-        - authenticated
+        - administrator
+        - application_manager
       '#access_view_roles':
-        - authenticated
+        - administrator
+        - application_manager
+    fee:
+      '#type': select
+      '#title': Fee
+      '#options':
+        International: $610
+        LocalNotRegistered: $60
+        LocalRegisteredNotOwner: $20
+        LocalRegisteredOwner: $0
+      '#states':
+        visible:
+          ':input[name="status"]':
+            value: Approved
+      '#access_create_roles': {  }
+      '#access_update_roles':
+        - administrator
+        - application_manager
+      '#access_view_roles':
+        - administrator
+        - application_manager
 css: ''
 javascript: ''
 settings:
@@ -294,8 +334,8 @@ settings:
   page_submit_path: ''
   page_confirm_path: ''
   page_theme_name: ''
-  form_title: both
-  form_submit_once: false
+  form_title: source_entity_webform
+  form_submit_once: true
   form_open_message: ''
   form_close_message: ''
   form_exception_message: ''
@@ -317,12 +357,12 @@ settings:
   form_required: false
   form_autofocus: false
   form_details_toggle: false
-  form_reset: false
+  form_reset: true
   form_access_denied: default
   form_access_denied_title: ''
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
-  form_file_limit: ''
+  form_file_limit: '50'
   form_attributes: {  }
   form_method: ''
   form_action: ''
@@ -477,11 +517,11 @@ handlers:
   email:
     id: email
     handler_id: email
-    label: 'Email notification for submission'
-    notes: ''
+    label: 'Email notification to acknowledge submission'
+    notes: 'Email notification to the user who submitted the form to acknowledge the receipt of his/her application.'
     status: true
     conditions: {  }
-    weight: 0
+    weight: -49
     settings:
       states:
         - completed
@@ -499,7 +539,7 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: 'Application Received'
-      body: '<p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>&nbsp;</p><p>We have received your application.</p>'
+      body: '<p>Dear [webform_submission:user]</p><p>We acknowledge the receipt of your type approval application on this date, [webform_submission:created]</p><p>You will receive further communication regarding the status of your application in a separate email.</p><p>Thank you</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -515,10 +555,10 @@ handlers:
     id: email
     handler_id: email_1
     label: 'Email notification for Application Manager'
-    notes: ''
+    notes: 'Email notification to CCK Application Manager to inform him/her about the submission.'
     status: true
     conditions: {  }
-    weight: 0
+    weight: -50
     settings:
       states:
         - completed
@@ -536,7 +576,7 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: 'Attention: Type Approval Application received through the web'
-      body: '<p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>&nbsp;</p><p>Dear Application Manager,</p><p>Some send a type approval application for your review.</p>'
+      body: '<p>Dear Application Manager,</p><p>A submission for Type Approval is received through the application portal.</p><p>Your urgent action is needed. Please login to the portal to review the submission.</p><p>Ko rabwa.&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -551,21 +591,18 @@ handlers:
   email_2:
     id: email
     handler_id: email_2
-    label: 'Email notification for approved local and existing device applications'
-    notes: ''
+    label: 'Email notification for approval of application'
+    notes: 'Email notification for approved application'
     status: true
     conditions:
       enabled:
         ':input[name="status"]':
           value: Approved
-        ':input[name="type_of_applicant"]':
-          value: 'Local Customer'
-        ':input[name="have_you_review_the_list_of_approved_devices"]':
-          value: 'Yes'
-    weight: 0
+    weight: -48
     settings:
       states:
         - completed
+        - updated
       to_mail: '[webform_submission:values:email_address:raw]'
       to_options: {  }
       bcc_mail: ''
@@ -579,8 +616,8 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: 'Application approved'
-      body: '<p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>Your application has been reviewed and approved. To get your release form, please pay to this account.&nbsp;</p><p>Communications Commission of Kiribati</p><p>1111111</p><p>Capture the screenshot and send it back by replying to this email.&nbsp;</p><p>For international customers, use the bank telegraphic transfer and send us the transfer reference.</p><p>Once we confirm the payment, you will receive another email for the release form.</p>'
+      subject: 'Type Approval Application Approved'
+      body: '<p>Dear [webform_submission:user],</p><p>Your application has been reviewed and now pending approval subject to the payment of the fee. Please pay the fee via bank transfer or Internet Banking App.</p><p>+------------------------------------------------------+</p><p>Account Details:</p><p>Bank: ANZ Bank (Kiribati) Limited</p><p>Address: Main Street, Bairiki, Tarawa, Kiribati</p><p>Swift: BKIRKIKI</p><p>Account Name: Communications Commission of Kiribati</p><p>Account Number: 1111111</p><p>Amount Due: [webform_submission:values:fee]</p><p>+------------------------------------------------------+</p><p>After you make the payment, please respond to this email attaching the proof such as the screenshot of the transaction or bank telegraphic transfer reference number.</p><p>Once we confirm the payment, you will receive the release form for your items.</p><p>Thank you.</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -596,16 +633,17 @@ handlers:
     id: email
     handler_id: email_3
     label: 'Email notification for rejected application'
-    notes: ''
+    notes: 'Notification for rejected applications.'
     status: true
     conditions:
       enabled:
         ':input[name="status"]':
           value: Rejected
-    weight: 0
+    weight: -47
     settings:
       states:
         - completed
+        - updated
       to_mail: '[webform_submission:values:email_address:raw]'
       to_options: {  }
       bcc_mail: ''
@@ -619,140 +657,8 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: _default
-      body: '<p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>Your application is rejected. Please respond to this email to get more information.</p>'
-      excluded_elements: {  }
-      ignore_access: false
-      exclude_empty: true
-      exclude_empty_checkbox: false
-      exclude_attachments: false
-      html: true
-      attachments: false
-      twig: false
-      theme_name: ''
-      parameters: {  }
-      debug: false
-  email_4:
-    id: email
-    handler_id: email_4
-    label: 'Email for approved local and new device application'
-    notes: ''
-    status: true
-    conditions:
-      enabled:
-        ':input[name="type_of_applicant"]':
-          value: 'Local Customer'
-        ':input[name="have_you_review_the_list_of_approved_devices"]':
-          value: 'No'
-        ':input[name="status"]':
-          value: Approved
-    weight: 0
-    settings:
-      states:
-        - completed
-      to_mail: _default
-      to_options: {  }
-      bcc_mail: ''
-      bcc_options: {  }
-      cc_mail: ''
-      cc_options: {  }
-      from_mail: _default
-      from_options: {  }
-      from_name: _default
-      reply_to: ''
-      return_path: ''
-      sender_mail: ''
-      sender_name: ''
-      subject: _default
-      body: '<p>Your application has been reviewed and approved. To get your release form, please pay to this account.&nbsp;</p><p>Amount: $30.00</p><p>Communications Commission of Kiribati</p><p>1111111</p><p>Capture the screenshot and send it back by replying to this email.&nbsp;</p><p>For international customers, use the bank telegraphic transfer and send us the transfer reference.</p><p>Once we confirm the payment, you will receive another email for the release form.</p>'
-      excluded_elements: {  }
-      ignore_access: false
-      exclude_empty: true
-      exclude_empty_checkbox: false
-      exclude_attachments: false
-      html: true
-      attachments: false
-      twig: false
-      theme_name: ''
-      parameters: {  }
-      debug: false
-  email_5:
-    id: email
-    handler_id: email_5
-    label: 'Email for approved international and existing device'
-    notes: ''
-    status: true
-    conditions:
-      enabled:
-        ':input[name="type_of_applicant"]':
-          value: 'International Customer'
-        ':input[name="status"]':
-          value: Approved
-        ':input[name="have_you_review_the_list_of_approved_devices"]':
-          value: 'No'
-    weight: 0
-    settings:
-      states:
-        - completed
-      to_mail: '[webform_submission:values:email_address:raw]'
-      to_options: {  }
-      bcc_mail: ''
-      bcc_options: {  }
-      cc_mail: ''
-      cc_options: {  }
-      from_mail: typeapproval@cck.ki
-      from_options: {  }
-      from_name: _default
-      reply_to: ''
-      return_path: ''
-      sender_mail: ''
-      sender_name: ''
-      subject: _default
-      body: '<p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>&nbsp;</p><p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>Your application has been reviewed and approved. To get your release form, please pay to this account.&nbsp;</p><p>Amount: $1000</p><p>Communications Commission of Kiribati</p><p>1111111</p><p>Use the bank telegraphic transfer and send us the transfer reference.</p><p>Once we confirm the payment, you will receive another email for the release form.</p>'
-      excluded_elements: {  }
-      ignore_access: false
-      exclude_empty: true
-      exclude_empty_checkbox: false
-      exclude_attachments: false
-      html: true
-      attachments: false
-      twig: false
-      theme_name: ''
-      parameters: {  }
-      debug: false
-  email_6:
-    id: email
-    handler_id: email_6
-    label: 'Email notification for approved international and existing device applications'
-    notes: ''
-    status: true
-    conditions:
-      enabled:
-        ':input[name="type_of_applicant"]':
-          value: 'International Customer'
-        ':input[name="status"]':
-          value: Approved
-        ':input[name="have_you_review_the_list_of_approved_devices"]':
-          value: 'No'
-    weight: 0
-    settings:
-      states:
-        - completed
-      to_mail: '[webform_submission:values:email_address:raw]'
-      to_options: {  }
-      bcc_mail: ''
-      bcc_options: {  }
-      cc_mail: ''
-      cc_options: {  }
-      from_mail: typeapproval@cck.ki
-      from_options: {  }
-      from_name: _default
-      reply_to: ''
-      return_path: ''
-      sender_mail: ''
-      sender_name: ''
-      subject: _default
-      body: '<p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>Your application has been reviewed and approved. To get your release form, please pay to this account.&nbsp;</p><p>Amount $500</p><p>Communications Commission of Kiribati</p><p>1111111</p><p>Use the bank telegraphic transfer and send us the transfer reference.</p><p>Once we confirm the payment, you will receive another email for the release form.</p>'
+      subject: 'Type Approval Application Rejected'
+      body: '<p>Dear [webform_submission:user],</p><p>We have reviewed your application and regret to inform you that we reject it due to the reason explained below.</p><p>+---------------------------------------------------------------+</p><p>Reason:</p><p>[webform_submission:values:reason_for_rejection]</p><p>+---------------------------------------------------------------+</p><p>To rectify the issue, please login to the application portal and edit your submission addressing the reasons above. Once you done, we will review your application again and communicate further with you.</p><p>Thank you.</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true

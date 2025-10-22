@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.approved_device.field_manufacturer
-    - field.field.node.approved_device.field_model
     - field.field.node.approved_device.field_original_registrant
     - field.field.node.approved_device.field_type_of_device
     - node.type.approved_device
@@ -23,14 +22,6 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
-  field_model:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_type_of_device:
     type: entity_reference_label
     label: above
@@ -45,4 +36,7 @@ content:
     weight: 0
     region: content
 hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   field_original_registrant: true

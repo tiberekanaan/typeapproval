@@ -23,9 +23,9 @@ third_party_settings:
     unpublish_enable: false
     unpublish_required: false
     unpublish_revision: false
-name: 'Approved Device'
+name: 'Approved Equipment'
 type: approved_device
-description: 'Content for approved devices'
+description: 'Content for approved equipment'
 help: null
 new_revision: true
 preview_mode: 1

@@ -8,7 +8,7 @@ id: node.approved_device.title
 field_name: title
 entity_type: node
 bundle: approved_device
-label: Name
+label: Model
 description: ''
 required: true
 translatable: true
