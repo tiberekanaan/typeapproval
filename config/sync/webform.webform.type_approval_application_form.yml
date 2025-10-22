@@ -362,7 +362,7 @@ settings:
   form_access_denied_title: ''
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
-  form_file_limit: '50'
+  form_file_limit: '50 MB'
   form_attributes: {  }
   form_method: ''
   form_action: ''

@@ -11,6 +11,7 @@
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/phpspec.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phpspec.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phpunit.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
@@ -18,14 +19,6 @@
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/sync/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/core.entity_form_display.node.approved_device.default.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/core.entity_form_display.node.approved_device.default.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/core.entity_view_display.node.approved_device.default.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/core.entity_view_display.node.approved_device.default.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/core.extension.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/core.extension.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/navigation.block_layout.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/navigation.settings.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/system.menu.content.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/system.menu.navigation-user-links.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sync/user.role.content_editor.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/user.role.content_editor.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/.csslintrc" beforeDir="false" afterPath="$PROJECT_DIR$/web/.csslintrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/web/.eslintignore" afterDir="false" />
@@ -403,6 +396,7 @@
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-feed" />
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-stdlib" />
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-escaper" />
+      <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -458,7 +452,7 @@
       <workItem from="1758274463408" duration="4697000" />
       <workItem from="1758279684202" duration="19069000" />
       <workItem from="1758520911854" duration="3760000" />
-      <workItem from="1761127351106" duration="5470000" />
+      <workItem from="1761127351106" duration="13631000" />
     </task>
     <servers />
   </component>

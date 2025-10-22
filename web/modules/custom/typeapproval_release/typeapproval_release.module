@@ -182,6 +182,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     $uids = $user_storage->getQuery()
       ->condition('status', 1)
       ->condition('roles', 'application_manager')
+      ->accessCheck(FALSE)
       ->execute();
     if (!empty($uids)) {
       $users = $user_storage->loadMultiple($uids);
@@ -201,14 +202,37 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
 
   $mailManager = \Drupal::service('plugin.manager.mail');
   $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
+  // Save the PDF to a file first, then read its content for attachment.
+  $file_system = \Drupal::service('file_system');
+  $temp_uri = 'public://' . $filename;
+  $saved_uri = $file_system->saveData($pdf_data, $temp_uri, \Drupal\Core\File\FileExists::Replace);
+  if (!$saved_uri) {
+    \Drupal::logger('typeapproval_release')->error('Failed to save PDF for submission @sid.', ['@sid' => $sid]);
+    return;
+  }
+  $attachment_content = @file_get_contents($saved_uri);
+  if ($attachment_content === FALSE) {
+    \Drupal::logger('typeapproval_release')->error('Failed to read PDF for submission @sid.', ['@sid' => $sid]);
+    try { $file_system->delete($saved_uri); } catch (\Exception $e) {}
+    return;
+  }
+
+  // Build absolute URL to the webform submission for inclusion in the email body.
+  $submission_url = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
+
   $params = [
     'subject' => t('Release form generated for submission @sid', ['@sid' => $sid]),
-    'body' => t('The release form PDF is attached for submission @sid.', ['@sid' => $sid]),
+    'body' => t('The release form PDF is attached for submission @sid. You can view the submission here: <a href=":url">Submission @sid</a>.', [
+      '@sid' => $sid,
+      ':url' => $submission_url,
+    ]),
     'attachments' => [
       [
-        'filecontent' => $pdf_data,
+        'filecontent' => $attachment_content,
         'filename' => $filename,
         'filemime' => 'application/pdf',
+        'filepath' => $saved_uri,
       ],
     ],
   ];
@@ -229,22 +253,6 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
 }
 
 /**
- * Implements hook_mail().
- */
-function typeapproval_release_mail($key, &$message, $params) {
-  switch ($key) {
-    case 'release_pdf':
-      $message['subject'] = $params['subject'] ?? t('Release form generated');
-      // Simple text body; symfony_mailer_lite can convert to HTML template if configured.
-      $message['body'][] = $params['body'] ?? '';
-      if (!empty($params['attachments'])) {
-        $message['params']['attachments'] = $params['attachments'];
-      }
-      break;
-  }
-}
-
-/**
  * Helper: Convert a local file to a data URI for embedding in HTML.
  */
 function _typeapproval_release_to_data_uri(string $path, string $mime): string {
@@ -256,4 +264,27 @@ function _typeapproval_release_to_data_uri(string $path, string $mime): string {
     return '';
   }
   return 'data:' . $mime . ';base64,' . base64_encode($data);
+}
+
+
+/**
+ * Implements hook_mail().
+ */
+function typeapproval_release_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'release_pdf':
+      $subject = !empty($params['subject']) ? $params['subject'] : t('Type Approval Release Form');
+      $body = !empty($params['body']) ? $params['body'] : t('Please find the attached release form PDF.');
+
+      // Ensure subject and body are set so that the email is not empty.
+      $message['subject'] = $subject;
+
+      // Send as HTML to support links/formatting.
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+      $message['headers']['MIME-Version'] = '1.0';
+
+      // Drupal expects body to be an array of strings.
+      $message['body'] = [is_array($body) ? implode("\n", $body) : (string) $body];
+      break;
+  }
 }
