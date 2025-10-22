@@ -1,0 +1,114 @@
+uuid: 8ab1a3f9-e2c3-4fbf-8fd3-c90de204bd39
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.base_field_override.node.approved_device.title
+    - field.field.node.approved_device.field_manufacturer
+    - field.field.node.approved_device.field_original_registrant
+    - field.field.node.approved_device.field_type_of_device
+    - node.type.approved_device
+  module:
+    - feeds_log
+    - node
+third_party_settings:
+  feeds_log:
+    status: true
+    operations:
+      created: created
+      updated: updated
+      deleted: deleted
+      skipped: skipped
+      failed: failed
+      cleaned: cleaned
+    items:
+      created: created
+      updated: updated
+      deleted: deleted
+      skipped: skipped
+      failed: failed
+    source: true
+label: 'Approved Equipment'
+id: approved_equipment
+description: ''
+help: ''
+import_period: 3600
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  values:
+    type: approved_device
+  langcode: en
+  insert_new: 1
+  update_existing: 0
+  update_non_existent: _keep
+  skip_hash_check: false
+  skip_validation: false
+  skip_validation_types: {  }
+  authorize: true
+  revision: false
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+custom_sources:
+  model:
+    value: Model
+    label: Model
+    machine_name: model
+    type: csv
+  manufacturer:
+    value: Manufacturer
+    label: Manufacturer
+    machine_name: manufacturer
+    type: csv
+  importer:
+    value: importer
+    label: importer
+    machine_name: importer
+    type: csv
+  type_of_equipment:
+    value: type_of_equipment
+    label: type_of_equipment
+    machine_name: type_of_equipment
+    type: csv
+mappings:
+  -
+    target: title
+    map:
+      value: model
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_manufacturer
+    map:
+      target_id: manufacturer
+    settings:
+      language: ''
+      reference_by: name
+      autocreate: 1
+      autocreate_bundle: brand
+  -
+    target: field_original_registrant
+    map:
+      value: importer
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_type_of_device
+    map:
+      target_id: type_of_equipment
+    settings:
+      language: ''
+      reference_by: name
+      autocreate: 1
+      autocreate_bundle: type_of_device

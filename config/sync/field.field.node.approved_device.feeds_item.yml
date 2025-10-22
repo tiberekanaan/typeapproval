@@ -1,0 +1,23 @@
+uuid: 42c9adfe-b748-4732-9ba1-856c7c5c515c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.feeds_item
+    - node.type.approved_device
+  module:
+    - feeds
+id: node.approved_device.feeds_item
+field_name: feeds_item
+entity_type: node
+bundle: approved_device
+label: 'Feeds item'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:feeds_feed'
+  handler_settings: {  }
+field_type: feeds_item

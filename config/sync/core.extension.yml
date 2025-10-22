@@ -40,6 +40,8 @@ module:
   editor: 0
   entity_print: 0
   entity_print_views: 0
+  feeds: 0
+  feeds_log: 0
   field: 0
   field_ui: 0
   file: 0

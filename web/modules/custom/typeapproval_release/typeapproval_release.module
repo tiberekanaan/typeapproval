@@ -3,6 +3,7 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Url;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_theme().
@@ -61,4 +62,198 @@ function typeapproval_release_webform_submission_view_alter(array &$build, Entit
   else {
     $build['typeapproval_release_pdf'] = $link;
   }
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * When the application manager changes the status from Need Review to Approved,
+ * generate the release PDF and email it to the application manager.
+ */
+function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface $entity) {
+  if (!$entity instanceof WebformSubmissionInterface) {
+    return;
+  }
+
+  // Only target the expected webform.
+  $webform = $entity->getWebform();
+  if (!$webform || $webform->id() !== 'type_approval_application_form') {
+    return;
+  }
+
+  // Get old and new status values.
+  $new_data = $entity->getData();
+  $new_status = $new_data['status'] ?? '';
+  $old_status = '';
+  if (isset($entity->original) && $entity->original instanceof WebformSubmissionInterface) {
+    $old_data = $entity->original->getData();
+    $old_status = $old_data['status'] ?? '';
+  }
+
+  // Proceed only if transitioning from Need Review -> Approved.
+  if (!(strcasecmp($old_status, 'Need Review') === 0 && strcasecmp($new_status, 'Approved') === 0)) {
+    return;
+  }
+
+  // Prevent duplicate sending using a state flag per submission id.
+  $sid = $entity->id();
+  $state = \Drupal::state();
+  $flag_key = 'typeapproval_release.pdf_sent.' . $sid;
+  if ($state->get($flag_key)) {
+    return;
+  }
+
+  // Build the same render array used by the controller and generate the PDF.
+  $applicant = [
+    'type_of_applicant' => $new_data['type_of_applicant'] ?? '',
+    'individual_or_organization' => $new_data['individual_or_organization'] ?? '',
+    'full_name' => $new_data['full_name'] ?? '',
+    'organization' => $new_data['organization'] ?? '',
+    'email_address' => $new_data['email_address'] ?? '',
+    'contact_person_name' => $new_data['contact_person_name'] ?? '',
+    'country' => $new_data['country'] ?? '',
+    'telephone' => $new_data['telephone'] ?? '',
+    'physical_address' => $new_data['physical_address'] ?? '',
+    'postal_address' => $new_data['postal_address'] ?? '',
+  ];
+
+  $device = [
+    'type_of_device' => $new_data['type_of_device'] ?? '',
+    'manufacturer' => $new_data['manufacturer'] ?? '',
+    'model' => $new_data['model'] ?? '',
+    'product_name' => $new_data['product_name'] ?? '',
+    'origin' => $new_data['origin'] ?? '',
+    'frequency_range' => $new_data['frequency_range'] ?? '',
+    'itu_emission_code' => $new_data['itu_emission_code'] ?? '',
+    'modulation' => $new_data['modulation'] ?? '',
+    'power_output' => $new_data['power_output'] ?? '',
+    'intended_use' => $new_data['intended_use_in_kiribati_select'] ?? '',
+    'quantity_of_device' => $new_data['quantity_of_device'] ?? '',
+  ];
+
+  // Resolve module path for assets.
+  $module_path = \Drupal::service('extension.list.module')->getPath('typeapproval_release');
+  $logo_path = DRUPAL_ROOT . DIRECTORY_SEPARATOR . $module_path . DIRECTORY_SEPARATOR . 'source' . DIRECTORY_SEPARATOR . 'logo.jpg';
+  $sign_path = DRUPAL_ROOT . DIRECTORY_SEPARATOR . $module_path . DIRECTORY_SEPARATOR . 'source' . DIRECTORY_SEPARATOR . 'sign.jpg';
+
+  $assets = [
+    'logo_image' => _typeapproval_release_to_data_uri($logo_path, 'image/jpeg'),
+    'sign_image' => _typeapproval_release_to_data_uri($sign_path, 'image/jpeg'),
+  ];
+
+  $build = [
+    '#theme' => 'typeapproval_release_pdf',
+    '#webform_submission' => $entity,
+    '#applicant' => $applicant,
+    '#device' => $device,
+    '#generated_on' => \Drupal::service('date.formatter')->format(\Drupal::time()->getRequestTime(), 'custom', 'Y-m-d H:i'),
+    '#assets' => $assets,
+    '#cache' => ['max-age' => 0],
+  ];
+
+  $renderer = \Drupal::service('renderer');
+  $html = $renderer->renderPlain($build);
+
+  // Generate PDF using Dompdf.
+  $options = new \Dompdf\Options();
+  $options->set('isRemoteEnabled', true);
+  $options->set('defaultPaperSize', 'a4');
+  $dompdf = new \Dompdf\Dompdf($options);
+  $dompdf->loadHtml($html);
+  $dompdf->setPaper('A4', 'portrait');
+  $dompdf->render();
+  $pdf_data = $dompdf->output();
+  $filename = 'release-form-' . $sid . '.pdf';
+
+  // Determine recipients: current user if application_manager, otherwise all with that role.
+  $recipients = [];
+  $current_user = \Drupal::currentUser();
+  if ($current_user->isAuthenticated()) {
+    $account = \Drupal\user\Entity\User::load($current_user->id());
+    if ($account && in_array('application_manager', $account->getRoles())) {
+      $mail = $account->getEmail();
+      if (!empty($mail)) {
+        $recipients[] = $mail;
+      }
+    }
+  }
+  if (empty($recipients)) {
+    $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+    $uids = $user_storage->getQuery()
+      ->condition('status', 1)
+      ->condition('roles', 'application_manager')
+      ->execute();
+    if (!empty($uids)) {
+      $users = $user_storage->loadMultiple($uids);
+      foreach ($users as $user) {
+        $mail = $user->getEmail();
+        if (!empty($mail)) {
+          $recipients[] = $mail;
+        }
+      }
+    }
+  }
+
+  if (empty($recipients)) {
+    \Drupal::logger('typeapproval_release')->warning('No application manager recipients found to email release PDF for submission @sid.', ['@sid' => $sid]);
+    return;
+  }
+
+  $mailManager = \Drupal::service('plugin.manager.mail');
+  $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+  $params = [
+    'subject' => t('Release form generated for submission @sid', ['@sid' => $sid]),
+    'body' => t('The release form PDF is attached for submission @sid.', ['@sid' => $sid]),
+    'attachments' => [
+      [
+        'filecontent' => $pdf_data,
+        'filename' => $filename,
+        'filemime' => 'application/pdf',
+      ],
+    ],
+  ];
+
+  $result_any = FALSE;
+  foreach (array_unique($recipients) as $to) {
+    $result = $mailManager->mail('typeapproval_release', 'release_pdf', $to, $langcode, $params, NULL, TRUE);
+    $result_any = $result_any || (!empty($result) && !empty($result['result']));
+  }
+
+  if ($result_any) {
+    $state->set($flag_key, TRUE);
+    \Drupal::logger('typeapproval_release')->notice('Release PDF emailed to application manager(s) for submission @sid.', ['@sid' => $sid]);
+  }
+  else {
+    \Drupal::logger('typeapproval_release')->error('Failed to send Release PDF email for submission @sid.', ['@sid' => $sid]);
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function typeapproval_release_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'release_pdf':
+      $message['subject'] = $params['subject'] ?? t('Release form generated');
+      // Simple text body; symfony_mailer_lite can convert to HTML template if configured.
+      $message['body'][] = $params['body'] ?? '';
+      if (!empty($params['attachments'])) {
+        $message['params']['attachments'] = $params['attachments'];
+      }
+      break;
+  }
+}
+
+/**
+ * Helper: Convert a local file to a data URI for embedding in HTML.
+ */
+function _typeapproval_release_to_data_uri(string $path, string $mime): string {
+  if (!is_readable($path)) {
+    return '';
+  }
+  $data = file_get_contents($path);
+  if ($data === FALSE) {
+    return '';
+  }
+  return 'data:' . $mime . ';base64,' . base64_encode($data);
 }

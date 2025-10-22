@@ -18,6 +18,14 @@
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/sync/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/.htaccess" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/core.entity_form_display.node.approved_device.default.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/core.entity_form_display.node.approved_device.default.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/core.entity_view_display.node.approved_device.default.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/core.entity_view_display.node.approved_device.default.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/core.extension.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/core.extension.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/navigation.block_layout.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/navigation.settings.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/system.menu.content.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/system.menu.navigation-user-links.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/sync/user.role.content_editor.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/sync/user.role.content_editor.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/.csslintrc" beforeDir="false" afterPath="$PROJECT_DIR$/web/.csslintrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/web/.eslintignore" afterDir="false" />
@@ -392,6 +400,9 @@
       <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/drupal/core" />
       <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/drupal/core-dev" />
       <path value="$PROJECT_DIR$/web/core/modules/package_manager/tests/fixtures/fake_site/vendor/drupal/core-recommended" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-feed" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-stdlib" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-escaper" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -402,38 +413,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;credentialsType com.jetbrains.php.remote.interpreter.ui.PhpCreateRemoteSdkForm&quot;: &quot;Docker Compose&quot;,
-    &quot;credentialsType com.jetbrains.php.remote.interpreter.ui.PhpInplaceEditRemoteSdkForm&quot;: &quot;Docker Compose&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;prod&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;//wsl.localhost/Ubuntu/home/sonvh/typeapproval/web/modules/custom/typeapproval_release/pdf_template&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "credentialsType com.jetbrains.php.remote.interpreter.ui.PhpCreateRemoteSdkForm": "Docker Compose",
+    "credentialsType com.jetbrains.php.remote.interpreter.ui.PhpInplaceEditRemoteSdkForm": "Docker Compose",
+    "git-widget-placeholder": "prod",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "//wsl.localhost/Ubuntu/home/sonvh/typeapproval",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="\\wsl.localhost\Ubuntu\home\sonvh\typeapproval" />
       <recent name="\\wsl.localhost\Ubuntu\home\sonvh\typeapproval\web\modules\custom\typeapproval_release\pdf_template" />
       <recent name="\\wsl.localhost\Ubuntu\home\sonvh\typeapproval\web\modules\custom\typeapproval_release\source" />
-      <recent name="\\wsl.localhost\Ubuntu\home\sonvh\typeapproval" />
     </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
-        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PS-252.26199.163" />
+        <option value="bundled-php-predefined-a98d8de5180a-f0a8ef430dfa-com.jetbrains.php.sharedIndexes-PS-252.26199.163" />
       </set>
     </attachedChunks>
   </component>
@@ -447,6 +458,7 @@
       <workItem from="1758274463408" duration="4697000" />
       <workItem from="1758279684202" duration="19069000" />
       <workItem from="1758520911854" duration="3760000" />
+      <workItem from="1761127351106" duration="5470000" />
     </task>
     <servers />
   </component>

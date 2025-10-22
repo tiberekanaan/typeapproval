@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.approved_device.feeds_item
     - field.field.node.approved_device.field_manufacturer
     - field.field.node.approved_device.field_original_registrant
     - field.field.node.approved_device.field_type_of_device
@@ -39,4 +40,5 @@ hidden:
   entity_print_view_epub: true
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
+  feeds_item: true
   field_original_registrant: true
