@@ -4,6 +4,47 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Url;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Enforce $0 fee and disable Fee field for repeat submissions.
+ */
+function typeapproval_release_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Ensure this is our target webform.
+  $webform = $form['#webform'] ?? NULL;
+  if (!$webform || (method_exists($webform, 'id') && $webform->id() !== 'type_approval_application_form')) {
+    return;
+  }
+  // Obtain current submission data if available.
+  $submission = $form['#webform_submission'] ?? NULL;
+  $data = [];
+  if ($submission instanceof WebformSubmissionInterface) {
+    $data = $submission->getData() ?: [];
+  }
+  // If this is a repeat/child submission, lock fee to $0.
+  if (!empty($data['repeat_parent_sid'])) {
+    if (isset($form['elements']['fee']) && is_array($form['elements']['fee'])) {
+      $form['elements']['fee']['#disabled'] = TRUE;
+      $form['elements']['fee']['#default_value'] = '$0';
+      $form['elements']['fee']['#value'] = '$0';
+    }
+  }
+}
+
+/**
+ * Ensure fee is always $0 for repeat submissions at save time.
+ */
+function typeapproval_release_webform_submission_presave(WebformSubmissionInterface $webform_submission) {
+  $webform = $webform_submission->getWebform();
+  if (!$webform || $webform->id() !== 'type_approval_application_form') {
+    return;
+  }
+  $data = $webform_submission->getData() ?: [];
+  if (!empty($data['repeat_parent_sid'])) {
+    $data['fee'] = '$0';
+    $webform_submission->setData($data);
+  }
+}
 
 /**
  * Implements hook_theme().
@@ -56,11 +97,38 @@ function typeapproval_release_webform_submission_view_alter(array &$build, Entit
     ],
   ];
 
+  // Add the PDF generate button.
   if (isset($build['actions']) && is_array($build['actions'])) {
     $build['actions']['typeapproval_release_pdf'] = $link;
   }
   else {
     $build['typeapproval_release_pdf'] = $link;
+  }
+
+  // Add "Request new release" button for the owner when status is Granted.
+  $data = $entity->getData();
+  $status = (string) ($data['status'] ?? '');
+  $is_approved = (strcasecmp($status, 'Approved') === 0);
+  $is_granted = (strcasecmp($status, 'Granted') === 0);
+  $is_owner = ((int) $entity->getOwnerId() === (int) \Drupal::currentUser()->id());
+  if (($is_granted || $is_approved) && $is_owner) {
+    $req_url = Url::fromRoute('typeapproval_release.request_new_release', [
+      'webform_submission' => $entity->id(),
+    ]);
+    $req_link = [
+      '#type' => 'link',
+      '#title' => t('Request new release'),
+      '#url' => $req_url,
+      '#attributes' => [
+        'class' => ['button'],
+      ],
+    ];
+    if (isset($build['actions']) && is_array($build['actions'])) {
+      $build['actions']['typeapproval_request_new_release'] = $req_link;
+    }
+    else {
+      $build['typeapproval_request_new_release'] = $req_link;
+    }
   }
 }
 
@@ -90,8 +158,8 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     $old_status = $old_data['status'] ?? '';
   }
 
-  // Proceed only if transitioning from Need Review -> Approved.
-  if (!(strcasecmp($old_status, 'Need Review') === 0 && strcasecmp($new_status, 'Approved') === 0)) {
+  // Proceed only if transitioning from Approved -> Granted.
+  if (!(strcasecmp($old_status, 'Approved') === 0 && strcasecmp($new_status, 'Granted') === 0)) {
     return;
   }
 
@@ -165,19 +233,23 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
   $pdf_data = $dompdf->output();
   $filename = 'release-form-' . $sid . '.pdf';
 
-  // Determine recipients: current user if application_manager, otherwise all with that role.
-  $recipients = [];
+  // Determine recipients separately for applicant and managers.
+  $applicant_email = trim($new_data['email_address'] ?? '');
+  $email_validator = \Drupal::service('email.validator');
+  $to_applicant = ($applicant_email && $email_validator->isValid($applicant_email)) ? $applicant_email : '';
+
+  $manager_recipients = [];
   $current_user = \Drupal::currentUser();
   if ($current_user->isAuthenticated()) {
     $account = \Drupal\user\Entity\User::load($current_user->id());
     if ($account && in_array('application_manager', $account->getRoles())) {
       $mail = $account->getEmail();
       if (!empty($mail)) {
-        $recipients[] = $mail;
+        $manager_recipients[] = $mail;
       }
     }
   }
-  if (empty($recipients)) {
+  if (empty($manager_recipients)) {
     $user_storage = \Drupal::entityTypeManager()->getStorage('user');
     $uids = $user_storage->getQuery()
       ->condition('status', 1)
@@ -189,14 +261,14 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
       foreach ($users as $user) {
         $mail = $user->getEmail();
         if (!empty($mail)) {
-          $recipients[] = $mail;
+          $manager_recipients[] = $mail;
         }
       }
     }
   }
 
-  if (empty($recipients)) {
-    \Drupal::logger('typeapproval_release')->warning('No application manager recipients found to email release PDF for submission @sid.', ['@sid' => $sid]);
+  if (empty($to_applicant) && empty($manager_recipients)) {
+    \Drupal::logger('typeapproval_release')->warning('No recipients (applicant or managers) found to email release PDF for submission @sid.', ['@sid' => $sid]);
     return;
   }
 
@@ -221,31 +293,51 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
   // Build absolute URL to the webform submission for inclusion in the email body.
   $submission_url = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
 
-  $params = [
-    'subject' => t('Release form generated for submission @sid', ['@sid' => $sid]),
-    'body' => t('The release form PDF is attached for submission @sid. You can view the submission here: <a href=":url">Submission @sid</a>.', [
-      '@sid' => $sid,
-      ':url' => $submission_url,
-    ]),
-    'attachments' => [
-      [
-        'filecontent' => $attachment_content,
-        'filename' => $filename,
-        'filemime' => 'application/pdf',
-        'filepath' => $saved_uri,
-      ],
+  // Parameters shared for both emails.
+  $base_attachment = [
+    [
+      'filecontent' => $attachment_content,
+      'filename' => $filename,
+      'filemime' => 'application/pdf',
+      'filepath' => $saved_uri,
     ],
   ];
 
   $result_any = FALSE;
-  foreach (array_unique($recipients) as $to) {
-    $result = $mailManager->mail('typeapproval_release', 'release_pdf', $to, $langcode, $params, NULL, TRUE);
+
+  // Send to applicant with applicant-focused template.
+  if (!empty($to_applicant)) {
+    $params_applicant = [
+      'subject' => t('Your Type Approval release form for submission @sid', ['@sid' => $sid]),
+      'body' => t('Dear applicant,<br/><br/>Your payment has been confirmed and your Type Approval release form is attached for submission @sid.<br/>You can view your submission here: <a href=":url">Submission @sid</a>.<br/><br/>Regards,<br/>CCK', [
+        '@sid' => $sid,
+        ':url' => $submission_url,
+      ]),
+      'attachments' => $base_attachment,
+    ];
+    $result = $mailManager->mail('typeapproval_release', 'release_pdf_applicant', $to_applicant, $langcode, $params_applicant, NULL, TRUE);
     $result_any = $result_any || (!empty($result) && !empty($result['result']));
+  }
+
+  // Send to managers with manager-focused template.
+  if (!empty($manager_recipients)) {
+    $params_manager = [
+      'subject' => t('Release form sent to applicant for submission @sid', ['@sid' => $sid]),
+      'body' => t('The release form PDF was generated after status changed to Granted and has been sent to the applicant.<br/>Submission link: <a href=":url">Submission @sid</a>.', [
+        '@sid' => $sid,
+        ':url' => $submission_url,
+      ]),
+      'attachments' => $base_attachment,
+    ];
+    foreach (array_unique($manager_recipients) as $to) {
+      $result = $mailManager->mail('typeapproval_release', 'release_pdf_manager', $to, $langcode, $params_manager, NULL, TRUE);
+      $result_any = $result_any || (!empty($result) && !empty($result['result']));
+    }
   }
 
   if ($result_any) {
     $state->set($flag_key, TRUE);
-    \Drupal::logger('typeapproval_release')->notice('Release PDF emailed to application manager(s) for submission @sid.', ['@sid' => $sid]);
+    \Drupal::logger('typeapproval_release')->notice('Release PDF emailed for submission @sid (applicant and/or managers).', ['@sid' => $sid]);
   }
   else {
     \Drupal::logger('typeapproval_release')->error('Failed to send Release PDF email for submission @sid.', ['@sid' => $sid]);
@@ -272,18 +364,21 @@ function _typeapproval_release_to_data_uri(string $path, string $mime): string {
  */
 function typeapproval_release_mail($key, &$message, $params) {
   switch ($key) {
-    case 'release_pdf':
-      $subject = !empty($params['subject']) ? $params['subject'] : t('Type Approval Release Form');
-      $body = !empty($params['body']) ? $params['body'] : t('Please find the attached release form PDF.');
-
-      // Ensure subject and body are set so that the email is not empty.
+    case 'release_pdf_applicant':
+      $subject = !empty($params['subject']) ? $params['subject'] : t('Your Type Approval Release Form');
+      $body = !empty($params['body']) ? $params['body'] : t('Dear applicant, please find the attached release form PDF.');
       $message['subject'] = $subject;
-
-      // Send as HTML to support links/formatting.
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
       $message['headers']['MIME-Version'] = '1.0';
+      $message['body'] = [is_array($body) ? implode("\n", $body) : (string) $body];
+      break;
 
-      // Drupal expects body to be an array of strings.
+    case 'release_pdf_manager':
+      $subject = !empty($params['subject']) ? $params['subject'] : t('Release Form Sent to Applicant');
+      $body = !empty($params['body']) ? $params['body'] : t('The release form has been generated and sent to the applicant.');
+      $message['subject'] = $subject;
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+      $message['headers']['MIME-Version'] = '1.0';
       $message['body'] = [is_array($body) ? implode("\n", $body) : (string) $body];
       break;
   }

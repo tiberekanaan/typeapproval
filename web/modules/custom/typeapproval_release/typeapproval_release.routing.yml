@@ -9,3 +9,15 @@ typeapproval_release.generate_pdf:
     parameters:
       webform_submission:
         type: entity:webform_submission
+
+typeapproval_release.request_new_release:
+  path: '/webform-submission/{webform_submission}/request-new-release'
+  defaults:
+    _form: '\Drupal\typeapproval_release\Form\RequestNewReleaseForm'
+    _title: 'Request new release'
+  requirements:
+    _entity_access: 'webform_submission.view'
+  options:
+    parameters:
+      webform_submission:
+        type: entity:webform_submission

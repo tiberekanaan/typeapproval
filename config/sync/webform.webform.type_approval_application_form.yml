@@ -316,6 +316,9 @@ elements: |-
         visible:
           ':input[name="status"]':
             value: Approved
+        enabled:
+          ':input[name="repeat_parent_sid"]':
+            empty: true
       '#access_create_roles': {  }
       '#access_update_roles':
         - administrator
@@ -323,6 +326,9 @@ elements: |-
       '#access_view_roles':
         - administrator
         - application_manager
+  repeat_parent_sid:
+    '#type': hidden
+    '#title': 'Repeat parent sid'
 css: ''
 javascript: ''
 settings:
@@ -379,7 +385,14 @@ settings:
   submission_excluded_elements: {  }
   submission_exclude_empty: false
   submission_exclude_empty_checkbox: false
-  submission_views: {  }
+  submission_views:
+    pass_submissions:
+      title: 'Pass submissions'
+      view: 'webform_submissions:embed_default'
+      webform_routes:
+        - entity.webform.results_submissions
+        - entity.webform.user.submissions
+      node_routes: {  }
   submission_views_replace: {  }
   submission_user_columns: {  }
   submission_user_duplicate: false
