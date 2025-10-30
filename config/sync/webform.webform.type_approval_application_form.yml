@@ -279,8 +279,9 @@ elements: |-
       '#title': Status
       '#options':
         'Need Review': 'Need Review'
-        Approved: Approved
         Rejected: Rejected
+        Approved: Approved
+        Granted: Granted
       '#default_value': 'Need Review'
       '#access_create_roles': {  }
       '#access_update_roles':
@@ -632,17 +633,16 @@ handlers:
   email_3:
     id: email
     handler_id: email_3
-    label: 'Email notification for rejected application'
-    notes: 'Notification for rejected applications.'
+    label: 'Email to send release form'
+    notes: 'This email will be sent when the status is changed from approved to granted upon the confirmation of payment.'
     status: true
     conditions:
       enabled:
         ':input[name="status"]':
-          value: Rejected
-    weight: -47
+          value: Granted
+    weight: 0
     settings:
       states:
-        - completed
         - updated
       to_mail: '[webform_submission:values:email_address:raw]'
       to_options: {  }
@@ -657,8 +657,8 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: 'Type Approval Application Rejected'
-      body: '<p>Dear [webform_submission:user],</p><p>We have reviewed your application and regret to inform you that we reject it due to the reason explained below.</p><p>+---------------------------------------------------------------+</p><p>Reason:</p><p>[webform_submission:values:reason_for_rejection]</p><p>+---------------------------------------------------------------+</p><p>To rectify the issue, please login to the application portal and edit your submission addressing the reasons above. Once you done, we will review your application again and communicate further with you.</p><p>Thank you.</p>'
+      subject: _default
+      body: '<p>Dear [webform_submission:user],</p><p>Thank you for your application. We have confirmed the receipt of your payment. Please find attached the release form and receipt.</p><p>Ko rabwa.</p><p>&nbsp;</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
