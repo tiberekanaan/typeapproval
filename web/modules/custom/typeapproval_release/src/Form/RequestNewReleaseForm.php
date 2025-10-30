@@ -209,7 +209,7 @@ class RequestNewReleaseForm extends FormBase {
 
     $this->messenger()->addStatus($this->t('New request created from submission @sid.', ['@sid' => $parent->id()]));
 
-    // Redirect to the newly created submission.
-    $form_state->setRedirectUrl($child->toUrl('canonical'));
+    // Redirect to the front page after creating the new request.
+    $form_state->setRedirect('<front>');
   }
 }
