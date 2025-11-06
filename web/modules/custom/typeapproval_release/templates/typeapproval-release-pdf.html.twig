@@ -27,9 +27,10 @@
 
     .row { margin-top: 6mm; font-size: 11pt; }
     .label { margin-right: 2mm; }
-    .check { display: inline-block; width: 6mm; height: 6mm; border: 1px solid #000; vertical-align: middle; margin: 0 2mm; }
+    .check { display: inline-block; width: 6mm; height: 6mm; border: 1px solid #000; vertical-align: middle; margin: 0 2mm; position: relative; }
     .line { display: inline-block; border: 1px solid #999; height: 7mm; min-width: 40mm; vertical-align: middle; padding: 0 2mm; box-sizing: border-box; }
     .wide { min-width: 55mm; }
+    .checked:before { content: 'V'; position: absolute; top: 0; left: 6px; }
 
     table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 4mm; }
     th, td { border: 1px solid #000; padding: 5px; vertical-align: top; word-wrap: break-word; }
@@ -73,18 +74,19 @@
     <div style="margin-bottom: 10px;">
       <span class="label">Custom: (<span style="font-family: DejaVu Sans,serif;">&#8730;</span>)</span>
     </div>
-    Betio <span class="check"></span>
-    Bonriki <span class="check"></span>
-    Others <span class="check"></span>
+    Betio <span class="check {{ custom == 'betio' ? 'checked' : '' }}"></span>
+    Bonriki <span class="check {{ custom == 'bonriki' ? 'checked' : '' }}"></span>
+    Others <span class="check {{ (custom != 'betio' and custom != 'bonriki') ? 'checked' : '' }}"></span>
     <span class="label" style="margin-left:4mm;">If others please specify:</span>
-    <span class="line wide"></span>
+    <span class="line wide">{% if custom != 'betio' and custom != 'bonriki' %}{{ custom }}{% endif %}</span>
   </div>
 
   <div class="row">Date: {{ "now"|date('j F Y') }}</div>
 
   <div class="row" style="margin-top:8mm;">Owner's name: {{ applicant.full_name ?: applicant.organization }}</div>
   <div class="row">Address: {{ applicant.physical_address }}</div>
-  <div class="row">Contact Phone/Email: {{ applicant.telephone }}{% if applicant.telephone and applicant.email_address %} / {% endif %}{{ applicant.email_address }}</div>
+  {% set phone = applicant.telephone ? applicant.telephone : applicant.mobile %}
+  <div class="row">Contact Phone/Email: {{ phone }}{% if phone and applicant.email_address %} / {% endif %}{{ applicant.email_address }}</div>
 
   <div class="row" style="margin-top:8mm;">Brief Description of Equipments:</div>
   <table>

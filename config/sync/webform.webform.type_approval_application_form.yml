@@ -57,7 +57,10 @@ elements: |-
       full_name:
         '#type': textfield
         '#title': 'Full Name'
-        '#required': true
+        '#states':
+          required:
+            ':input[name="individual_or_organization"]':
+              value: Individual
       mobile:
         '#type': tel
         '#title': Mobile
@@ -65,9 +68,11 @@ elements: |-
           disabled:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
-          optional:
+          required:
             ':input[name="type_of_applicant"]':
-              value: 'International Customer'
+              value: 'Local Customer'
+            ':input[name="individual_or_organization"]':
+              value: Individual
     flexbox_10:
       '#type': webform_flexbox
       '#states':
@@ -77,7 +82,10 @@ elements: |-
       organization:
         '#type': textfield
         '#title': Organization
-        '#required': true
+        '#states':
+          required:
+            ':input[name="individual_or_organization"]':
+              value: Organization
       website:
         '#type': url
         '#title': Website
@@ -94,7 +102,9 @@ elements: |-
           disabled:
             ':input[name="individual_or_organization"]':
               value: Individual
-        '#required': true
+          required:
+            ':input[name="individual_or_organization"]':
+              value: Organization
     physical_address:
       '#type': textarea
       '#title': 'Physical Address'
@@ -112,8 +122,10 @@ elements: |-
           enabled:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
+          required:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#default_value': Kiribati
-        '#required': true
       telephone:
         '#type': tel
         '#title': Telephone
@@ -121,9 +133,11 @@ elements: |-
           enabled:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
+          required:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#international': true
         '#telephone_validation_format': '0'
-        '#required': true
   device_and_import_information:
     '#type': webform_section
     '#title': 'Device and Import Information'
@@ -169,7 +183,9 @@ elements: |-
           visible:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
-        '#required': true
+          required:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
     flexbox_05:
       '#type': webform_flexbox
       frequency_range:
@@ -182,7 +198,12 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
-        '#required': true
+          required:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
       itu_emission_code:
         '#type': textfield
         '#title': 'ITU Emission Code'
@@ -193,7 +214,12 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
-        '#required': true
+          required:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
     flexbox_06:
       '#type': webform_flexbox
       modulation:
@@ -206,7 +232,12 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
-        '#required': true
+          required:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
       power_output:
         '#type': textfield
         '#title': 'Power Output'
@@ -217,7 +248,12 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
-        '#required': true
+          required:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
     intended_use_in_kiribati_select:
       '#type': select
       '#title': 'Intended Use in Kiribati'
@@ -267,8 +303,10 @@ elements: |-
           visible:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
+          required:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#max_filesize': '25'
-        '#required': true
     flexbox_08:
       '#type': webform_flexbox
       copy_of_labeling_marking:
@@ -278,8 +316,10 @@ elements: |-
           visible:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
+          required:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#max_filesize': '25'
-        '#required': true
       operating_manual_catalogue:
         '#type': webform_document_file
         '#title': 'Operating Manual / Catalogue'
@@ -287,8 +327,10 @@ elements: |-
           visible:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
+          required:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
         '#max_filesize': '25'
-        '#required': true
     description_of_repair_services_in_kiribati:
       '#type': textarea
       '#title': 'Description of Repair Services in Kiribati'
@@ -327,6 +369,9 @@ elements: |-
         visible:
           ':input[name="status"]':
             value: Rejected
+        required:
+          ':input[name="status"]':
+            value: Rejected
       '#access_create_roles': {  }
       '#access_update_roles':
         - administrator
@@ -334,7 +379,6 @@ elements: |-
       '#access_view_roles':
         - administrator
         - application_manager
-      '#required': true
     fee:
       '#type': select
       '#title': Fee

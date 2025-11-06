@@ -13,6 +13,18 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "intl-tel-input": {
+            "type": "package",
+            "package": {
+                "name": "jackocnr/intl-tel-input",
+                "version": "v25.3.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/jackocnr/intl-tel-input/archive/refs/tags/v25.3.0.zip",
+                    "type": "zip"
+                }
+            }
         }
     },
     "require": {
@@ -65,6 +77,8 @@
         "drupal/menu_link_attributes": "^1.5",
         "drupal/metatag": "^2",
         "drupal/pathauto": "^1.13",
+        "drupal/phone_international": "^4.0",
+        "drupal/profile": "^1.12",
         "drupal/project_browser": "^2.1-beta2",
         "drupal/recipe_installer_kit": "^1-alpha6@alpha",
         "drupal/redirect": "^1.10",
@@ -86,7 +100,6 @@
         "drupal/svg_image": "^3.1",
         "drupal/symfony_mailer_lite": "^2.0.1",
         "drupal/tagify": "^1.2",
-        "drupal/telephone_validation": "^2.5",
         "drupal/token": "^1.15",
         "drupal/token_or": "^2.2",
         "drupal/trash": "^3.0.13",
@@ -95,6 +108,7 @@
         "drupal/webform_views": "^5.5",
         "drupal/yoast_seo": "^2.1",
         "geocoder-php/nominatim-provider": "^5.7",
+        "jackocnr/intl-tel-input": "^25.3",
         "league/commonmark": "^2.4"
     },
     "require-dev": {

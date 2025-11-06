@@ -1,0 +1,27 @@
+uuid: 32818d5f-afe9-41f8-8efc-c3665489c5bd
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - profile
+id: profile.field_individual_or_organization
+field_name: field_individual_or_organization
+entity_type: profile
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: individual
+      label: Individual
+    -
+      value: organization
+      label: Organization
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,27 @@
+uuid: 7db3b8ad-c679-4142-a93c-c41f2391f56f
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - profile
+id: profile.field_local_or_international
+field_name: field_local_or_international
+entity_type: profile
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: local_customer
+      label: 'Local Customer'
+    -
+      value: international_customer
+      label: 'International Customer'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

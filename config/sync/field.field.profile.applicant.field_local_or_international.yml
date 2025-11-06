@@ -1,0 +1,21 @@
+uuid: 639bf747-b470-4277-927c-1eada5635480
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_local_or_international
+    - profile.type.applicant
+  module:
+    - options
+id: profile.applicant.field_local_or_international
+field_name: field_local_or_international
+entity_type: profile
+bundle: applicant
+label: 'Local or International'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,21 @@
+uuid: 205168c0-a618-4f2d-baba-aa6b596d09a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_individual_or_organization
+    - profile.type.applicant
+  module:
+    - options
+id: profile.applicant.field_individual_or_organization
+field_name: field_individual_or_organization
+entity_type: profile
+bundle: applicant
+label: 'Individual or Organization'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

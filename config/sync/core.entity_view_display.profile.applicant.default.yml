@@ -6,6 +6,10 @@ dependencies:
     - field.field.profile.applicant.field_contact_person_name
     - field.field.profile.applicant.field_country
     - field.field.profile.applicant.field_email_address
+    - field.field.profile.applicant.field_full_name
+    - field.field.profile.applicant.field_individual_or_organization
+    - field.field.profile.applicant.field_local_or_international
+    - field.field.profile.applicant.field_mobile
     - field.field.profile.applicant.field_organization
     - field.field.profile.applicant.field_physical_address
     - field.field.profile.applicant.field_postal_address
@@ -14,6 +18,7 @@ dependencies:
     - profile.type.applicant
   module:
     - link
+    - options
     - phone_international
 id: profile.applicant.default
 targetEntityType: profile
@@ -42,6 +47,36 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_full_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_individual_or_organization:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_local_or_international:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_mobile:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 13
     region: content
   field_organization:
     type: string

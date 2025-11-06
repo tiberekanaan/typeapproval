@@ -13,8 +13,7 @@ use Drupal\webform\Entity\WebformOptions;
  */
 function typeapproval_release_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   // Ensure this is our target webform.
-  $webform = $form['#webform'] ?? NULL;
-  if (!$webform || (method_exists($webform, 'id') && $webform->id() !== 'type_approval_application_form')) {
+  if ($form['#webform_id'] !== 'type_approval_application_form') {
     return;
   }
   // Obtain current submission data if available.
@@ -30,6 +29,185 @@ function typeapproval_release_webform_submission_form_alter(array &$form, FormSt
       $form['elements']['fee']['#default_value'] = '$0';
       $form['elements']['fee']['#value'] = '$0';
     }
+  }
+
+  // Apply prefilling ONLY for new submissions (not edits).
+  $is_new_submission = TRUE;
+  if ($submission instanceof WebformSubmissionInterface) {
+    $is_new_submission = $submission->isNew();
+  }
+  if (!$is_new_submission) {
+    return;
+  }
+
+  // Get profile and proceed only if available.
+  $account = \Drupal::currentUser();
+  /** @var \Drupal\Core\Entity\EntityStorageInterface $profile_storage */
+  $profile_storage = \Drupal::entityTypeManager()->getStorage('profile');
+  /** @var \Drupal\profile\Entity\ProfileInterface|null $profile */
+  $profile = NULL;
+  if (method_exists($profile_storage, 'loadByUser')) {
+    $profile = $profile_storage->loadByUser($account, 'applicant');
+  }
+  if (!$profile) {
+    return;
+  }
+
+  // Helper to safely set default value if element has no value yet.
+  $set_default = function (&$element, $key, $value) use ($data) {
+    if (!isset($element) || !is_array($element)) {
+      return;
+    }
+    // Do not override existing submission data.
+    $has_submission_value = array_key_exists($key, $data) && $data[$key] !== '' && $data[$key] !== NULL;
+    if ($has_submission_value) {
+      return;
+    }
+    // Do not override already defined defaults.
+    if (!empty($element['#default_value'])) {
+      return;
+    }
+    if ($value !== NULL && $value !== '') {
+      $element['#default_value'] = $value;
+    }
+  };
+
+  // Extract values from profile fields.
+  $get_text = function ($field_name) use ($profile) {
+    if (!$profile->hasField($field_name)) {
+      return NULL;
+    }
+    $val = $profile->get($field_name)->value ?? NULL;
+    if ($val === '' || $val === NULL) {
+      return NULL;
+    }
+    return $val;
+  };
+
+  $email = $get_text('field_email_address');
+  $contact_person = $get_text('field_contact_person_name');
+  $organization = $get_text('field_organization');
+  $physical_address = $get_text('field_physical_address');
+  $postal_address = $get_text('field_postal_address');
+  $country = $get_text('field_country');
+  $phone = $get_text('field_telephone');
+  // New profile selectors (prefer these over heuristics).
+  $profile_local_international = $get_text('field_local_or_international');
+  $profile_individual_org = $get_text('field_individual_or_organization');
+
+  // Website (link) needs to read uri.
+  $website = NULL;
+  if ($profile->hasField('field_website') && !$profile->get('field_website')->isEmpty()) {
+    $website_item = $profile->get('field_website')->first();
+    if ($website_item) {
+      try {
+        $url_obj = $website_item->getUrl();
+        if ($url_obj) {
+          $website = $url_obj->toString();
+        }
+      }
+      catch (\Throwable $e) {
+        $uri = $website_item->get('uri')->getString();
+        if (!empty($uri)) {
+          $website = $uri;
+        }
+      }
+    }
+  }
+
+  // Normalize helper for applicant type strictly based on profile field.
+  $normalize_type_of_applicant = function ($value) {
+    if (is_string($value)) {
+      // Accept common variants.
+      if ($value == 'local_customer') {
+        return 'Local Customer';
+      }
+      if ($value == 'international_customer') {
+        return 'International Customer';
+      }
+    }
+    // No fallback: depend only on field_local_or_international.
+    return NULL;
+  };
+
+  // Normalize helper for individual or organization strictly based on profile field.
+  $normalize_individual_org = function ($value) {
+    if (is_string($value)) {
+      $v = trim($value);
+      if (strcasecmp($v, 'Individual') === 0) {
+        return 'Individual';
+      }
+      if (strcasecmp($v, 'Organization') === 0 || strcasecmp($v, 'Organisation') === 0) {
+        return 'Organization';
+      }
+    }
+    // No fallback: depend only on field_individual_or_organization.
+    return NULL;
+  };
+
+  // Determine initial applicant type selections based first on profile fields.
+  $individual_or_org = $normalize_individual_org($profile_individual_org);
+  $type_of_applicant = $normalize_type_of_applicant($profile_local_international);
+
+  // Prefill the initial review selectors if present.
+  if (isset($form['elements']['applicant_type_selection']['flexbox_11'])) {
+    $ats =& $form['elements']['applicant_type_selection']['flexbox_11'];
+    if (isset($ats['type_of_applicant'])) {
+      $set_default($ats['type_of_applicant'], 'type_of_applicant', $type_of_applicant);
+    }
+    if (isset($ats['individual_or_organization'])) {
+      $set_default($ats['individual_or_organization'], 'individual_or_organization', $individual_or_org);
+    }
+  }
+
+  // Only proceed with Applicant Information if the section exists.
+  if (!isset($form['elements']['applicant_information']) || !is_array($form['elements']['applicant_information'])) {
+    return;
+  }
+
+  // Map and set defaults on form elements based on the rules provided.
+  $ai =& $form['elements']['applicant_information'];
+
+  // International Customer: Prefill Country and Telephone (mapped to mobile field).
+  if ($type_of_applicant === 'International Customer') {
+    if (isset($ai['flexbox_01'])) {
+      $set_default($ai['flexbox_01']['country'], 'country', $country);
+    }
+    if (isset($ai['flexbox']['mobile'])) {
+      $set_default($ai['flexbox']['mobile'], 'mobile', $phone);
+    }
+  }
+
+  // Local + Individual: Prefill Mobile.
+  if ($type_of_applicant === 'Local Customer' && $individual_or_org === 'Individual') {
+    if (isset($ai['flexbox'])) {
+      $set_default($ai['flexbox']['mobile'], 'mobile', $phone);
+    }
+  }
+
+  // Individual (any type): Prefill Full Name.
+  if ($individual_or_org === 'Individual') {
+    if (isset($ai['flexbox'])) {
+      $set_default($ai['flexbox']['full_name'], 'full_name', $contact_person);
+    }
+  }
+
+  // Organization: Prefill Organization, Website, Contact Person Name.
+  if ($individual_or_org === 'Organization') {
+    if (isset($ai['flexbox_10'])) {
+      $set_default($ai['flexbox_10']['organization'], 'organization', $organization);
+      $set_default($ai['flexbox_10']['website'], 'website', $website);
+    }
+    if (isset($ai['flexbox_02'])) {
+      $set_default($ai['flexbox_02']['contact_person_name'], 'contact_person_name', $contact_person);
+    }
+  }
+
+  // Always prefill email and addresses for all cases.
+  $set_default($ai['physical_address'], 'physical_address', $physical_address);
+  $set_default($ai['postal_address'], 'postal_address', $postal_address);
+  if (isset($ai['flexbox_02'])) {
+    $set_default($ai['flexbox_02']['email_address'], 'email_address', $email);
   }
 }
 
@@ -67,19 +245,14 @@ function typeapproval_release_form_profile_form_alter(array &$form, FormStateInt
     $options = array_combine($countries, $countries);
   }
   // Update the widget element to be a select list with the loaded options.
-  $form['field_country']['widget'][0]['value'] = [
-    '#type' => 'select',
-    '#options' => $options,
-    '#default_value' => $entity->get('field_country')->getValue(),
-    '#title' => $form['field_country']['widget']['#title'],
-    '#description' => $form['field_country']['widget']['#description'],
-    '#required' => $form['field_country']['widget']['#required'],
-  ];
+  $element =& $form['field_country']['widget'][0]['value'];
+  $element['#type'] = 'select';
+  $element['#options'] = $options;
   // Allow an empty selection if the field is not required.
   $required = !empty($element['#required']);
   if (!$required) {
-    $form['field_country']['widget'][0]['value']['#empty_option'] = t('- Select -');
-    $form['field_country']['widget'][0]['value']['#empty_value'] = '';
+    $element['#empty_option'] = t('- Select -');
+    $element['#empty_value'] = '';
   }
 }
 
@@ -111,6 +284,7 @@ function typeapproval_release_theme($existing, $type, $theme, $path) {
         'status' => '',
         'generated_on' => '',
         'assets' => [],
+        'custom' => '',
       ],
       'template' => 'typeapproval-release-pdf',
     ],
@@ -233,6 +407,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     'contact_person_name' => $new_data['contact_person_name'] ?? '',
     'country' => $new_data['country'] ?? '',
     'telephone' => $new_data['telephone'] ?? '',
+    'mobile' => $new_data['mobile'] ?? '',
     'physical_address' => $new_data['physical_address'] ?? '',
     'postal_address' => $new_data['postal_address'] ?? '',
   ];
@@ -261,6 +436,18 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     'sign_image' => _typeapproval_release_to_data_uri($sign_path, 'image/jpeg'),
   ];
 
+  $custom_entry_point = $new_data['custom_entry_point'];
+  switch ($custom_entry_point) {
+    case 'Customs Betio':
+      $custom = 'betio';
+      break;
+    case 'Customs Bonriki':
+      $custom = 'bonriki';
+      break;
+    default:
+      $custom = $custom_entry_point;
+  }
+
   $build = [
     '#theme' => 'typeapproval_release_pdf',
     '#webform_submission' => $entity,
@@ -269,6 +456,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     '#generated_on' => \Drupal::service('date.formatter')->format(\Drupal::time()->getRequestTime(), 'custom', 'Y-m-d H:i'),
     '#assets' => $assets,
     '#cache' => ['max-age' => 0],
+    '#custom' => $custom,
   ];
 
   $renderer = \Drupal::service('renderer');
@@ -283,7 +471,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
   $dompdf->setPaper('A4', 'portrait');
   $dompdf->render();
   $pdf_data = $dompdf->output();
-  $filename = 'release-form-' . $sid . '.pdf';
+  $filename = 'Release Form - ' . ($new_data['full_name'] ?: $new_data['contact_person_name']) . '.pdf';
 
   // Determine recipients separately for applicant and managers.
   $applicant_email = trim($new_data['email_address'] ?? '');
