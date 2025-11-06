@@ -1,0 +1,13 @@
+uuid: 2b026747-ff56-4bbb-9fd7-d451238d6a9c
+langcode: en
+status: true
+dependencies: {  }
+id: applicant
+label: Applicant
+display_label: 'Applicant Profile'
+multiple: false
+registration: false
+roles:
+  applicant: applicant
+allow_revisions: false
+new_revision: false

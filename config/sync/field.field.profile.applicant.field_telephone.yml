@@ -1,0 +1,21 @@
+uuid: 1a065f44-f363-4c95-87e5-9d3b84c67157
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_telephone
+    - profile.type.applicant
+  module:
+    - phone_international
+id: profile.applicant.field_telephone
+field_name: field_telephone
+entity_type: profile
+bundle: applicant
+label: Telephone
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: phone_international

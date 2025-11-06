@@ -1,0 +1,19 @@
+uuid: 0e83121b-80c8-4aef-9726-d9f56ec4fea9
+langcode: en
+status: true
+dependencies:
+  module:
+    - profile
+id: profile.field_physical_address
+field_name: field_physical_address
+entity_type: profile
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

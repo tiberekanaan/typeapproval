@@ -3,8 +3,8 @@
   <component name="PHPUnit">
     <option name="directories">
       <list>
-        <option value="$PROJECT_DIR$/web/core/tests/PHPStan/tests" />
         <option value="$PROJECT_DIR$/web/modules/contrib/feeds/tests/src/Unit" />
+        <option value="$PROJECT_DIR$/web/core/tests/PHPStan/tests" />
       </list>
     </option>
   </component>

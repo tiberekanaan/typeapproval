@@ -5,6 +5,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Url;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\profile\Entity\ProfileInterface;
+use Drupal\webform\Entity\WebformOptions;
 
 /**
  * Enforce $0 fee and disable Fee field for repeat submissions.
@@ -28,6 +30,56 @@ function typeapproval_release_webform_submission_form_alter(array &$form, FormSt
       $form['elements']['fee']['#default_value'] = '$0';
       $form['elements']['fee']['#value'] = '$0';
     }
+  }
+}
+
+/**
+ * Alter Applicant Profile form: change country to select with Webform options.
+ */
+function typeapproval_release_form_profile_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Get the profile entity from the form state.
+  $form_object = $form_state->getFormObject();
+  if (!$form_object || !method_exists($form_object, 'getEntity')) {
+    return;
+  }
+  $entity = $form_object->getEntity();
+  if (!$entity instanceof ProfileInterface) {
+    return;
+  }
+  // Only target the Applicant bundle.
+  if ($entity->bundle() !== 'applicant') {
+    return;
+  }
+  // Ensure the field exists on the form.
+  if (!isset($form['field_country']['widget'][0]['value']) || !is_array($form['field_country']['widget'][0]['value'])) {
+    return;
+  }
+  // Load Webform options: country_names. Fallback to country_manager if needed.
+  $options = [];
+  if ($webform_options = WebformOptions::load('country_names')) {
+    $options = $webform_options->getOptions() ?: [];
+  }
+  if (empty($options)) {
+    // Fallback: build options as Country name => Country name.
+    /** @var \Drupal\Core\Locale\CountryManagerInterface $country_manager */
+    $country_manager = \Drupal::service('country_manager');
+    $countries = $country_manager->getList();
+    $options = array_combine($countries, $countries);
+  }
+  // Update the widget element to be a select list with the loaded options.
+  $form['field_country']['widget'][0]['value'] = [
+    '#type' => 'select',
+    '#options' => $options,
+    '#default_value' => $entity->get('field_country')->getValue(),
+    '#title' => $form['field_country']['widget']['#title'],
+    '#description' => $form['field_country']['widget']['#description'],
+    '#required' => $form['field_country']['widget']['#required'],
+  ];
+  // Allow an empty selection if the field is not required.
+  $required = !empty($element['#required']);
+  if (!$required) {
+    $form['field_country']['widget'][0]['value']['#empty_option'] = t('- Select -');
+    $form['field_country']['widget'][0]['value']['#empty_value'] = '';
   }
 }
 

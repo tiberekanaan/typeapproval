@@ -1,0 +1,19 @@
+uuid: ef1183c6-e9d2-4c93-a64a-1960a70f087f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_country
+    - profile.type.applicant
+id: profile.applicant.field_country
+field_name: field_country
+entity_type: profile
+bundle: applicant
+label: ' Country'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

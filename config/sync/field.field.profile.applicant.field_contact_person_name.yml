@@ -1,0 +1,19 @@
+uuid: d618230b-1d1b-4e76-98ec-7aaa12a5caeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_contact_person_name
+    - profile.type.applicant
+id: profile.applicant.field_contact_person_name
+field_name: field_contact_person_name
+entity_type: profile
+bundle: applicant
+label: 'Contact Person Name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

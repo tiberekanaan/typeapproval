@@ -1,0 +1,95 @@
+uuid: fcfaa11e-bc56-4e6b-8c0e-3a2fbdeeaf34
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.applicant.field_contact_person_name
+    - field.field.profile.applicant.field_country
+    - field.field.profile.applicant.field_email_address
+    - field.field.profile.applicant.field_organization
+    - field.field.profile.applicant.field_physical_address
+    - field.field.profile.applicant.field_postal_address
+    - field.field.profile.applicant.field_telephone
+    - field.field.profile.applicant.field_website
+    - profile.type.applicant
+  module:
+    - link
+    - phone_international
+id: profile.applicant.default
+targetEntityType: profile
+bundle: applicant
+mode: default
+content:
+  field_contact_person_name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_country:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_email_address:
+    type: email_default
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
+  field_organization:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_physical_address:
+    type: string_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_postal_address:
+    type: string_textarea
+    weight: 6
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_telephone:
+    type: phone_international_widget
+    weight: 3
+    region: content
+    settings:
+      geolocation: false
+      initial_country: KI
+      exclude_countries: {  }
+      preferred_countries:
+        - KI
+      countries: all
+      dial_code: false
+      auto_placeholder: aggressive
+      national_number: true
+    third_party_settings: {  }
+  field_website:
+    type: link_default
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+hidden:
+  is_default: true

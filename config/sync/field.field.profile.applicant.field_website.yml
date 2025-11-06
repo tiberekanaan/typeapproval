@@ -1,0 +1,23 @@
+uuid: 7cdaf085-69de-4edc-9769-964599867d42
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_website
+    - profile.type.applicant
+  module:
+    - link
+id: profile.applicant.field_website
+field_name: field_website
+entity_type: profile
+bundle: applicant
+label: Website
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

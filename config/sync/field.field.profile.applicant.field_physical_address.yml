@@ -1,0 +1,19 @@
+uuid: 29b4f7a9-07f9-43fa-b173-53f5c743c1ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_physical_address
+    - profile.type.applicant
+id: profile.applicant.field_physical_address
+field_name: field_physical_address
+entity_type: profile
+bundle: applicant
+label: 'Physical Address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

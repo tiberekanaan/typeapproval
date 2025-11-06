@@ -1,0 +1,90 @@
+uuid: 44c3becb-1f29-42fd-85e6-4cfdc70eb88a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.applicant.field_contact_person_name
+    - field.field.profile.applicant.field_country
+    - field.field.profile.applicant.field_email_address
+    - field.field.profile.applicant.field_organization
+    - field.field.profile.applicant.field_physical_address
+    - field.field.profile.applicant.field_postal_address
+    - field.field.profile.applicant.field_telephone
+    - field.field.profile.applicant.field_website
+    - profile.type.applicant
+  module:
+    - link
+    - phone_international
+id: profile.applicant.default
+targetEntityType: profile
+bundle: applicant
+mode: default
+content:
+  field_contact_person_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_country:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_email_address:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_organization:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_physical_address:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_postal_address:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_telephone:
+    type: phone_international_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_website:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 9
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true

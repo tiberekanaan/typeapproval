@@ -1,0 +1,19 @@
+uuid: ec9121d7-4450-4d5f-aa71-768f2137d32a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_email_address
+    - profile.type.applicant
+id: profile.applicant.field_email_address
+field_name: field_email_address
+entity_type: profile
+bundle: applicant
+label: 'Email Address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email
