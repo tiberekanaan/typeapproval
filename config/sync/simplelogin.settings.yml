@@ -1,0 +1,10 @@
+_core:
+  default_config_hash: 9r79RnuSYAYceHaBnVn9pGXHfaAOnIfJWdxeIMyNsj4
+background_active: false
+background_image: {  }
+background_color: '#046e4a'
+background_opacity: false
+button_background: true
+wrapper_width: 720
+unset_active_css: false
+unset_css: ''

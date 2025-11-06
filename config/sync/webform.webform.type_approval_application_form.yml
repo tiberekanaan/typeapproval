@@ -37,12 +37,14 @@ elements: |-
         '#options':
           'Local Customer': 'Local Customer'
           'International Customer': 'International Customer'
+        '#required': true
       individual_or_organization:
         '#type': select
         '#title': 'Individual or Organization'
         '#options':
           Individual: Individual
           Organization: Organization
+        '#required': true
   applicant_information:
     '#type': webform_section
     '#title': 'Applicant Information'
@@ -55,11 +57,15 @@ elements: |-
       full_name:
         '#type': textfield
         '#title': 'Full Name'
+        '#required': true
       mobile:
         '#type': tel
         '#title': Mobile
         '#states':
           disabled:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
+          optional:
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
     flexbox_10:
@@ -71,6 +77,7 @@ elements: |-
       organization:
         '#type': textfield
         '#title': Organization
+        '#required': true
       website:
         '#type': url
         '#title': Website
@@ -79,6 +86,7 @@ elements: |-
       email_address:
         '#type': email
         '#title': 'Email Address'
+        '#required': true
       contact_person_name:
         '#type': textfield
         '#title': 'Contact Person Name'
@@ -86,6 +94,7 @@ elements: |-
           disabled:
             ':input[name="individual_or_organization"]':
               value: Individual
+        '#required': true
     physical_address:
       '#type': textarea
       '#title': 'Physical Address'
@@ -104,6 +113,7 @@ elements: |-
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
         '#default_value': Kiribati
+        '#required': true
       telephone:
         '#type': tel
         '#title': Telephone
@@ -113,6 +123,7 @@ elements: |-
               value: 'International Customer'
         '#international': true
         '#telephone_validation_format': '0'
+        '#required': true
   device_and_import_information:
     '#type': webform_section
     '#title': 'Device and Import Information'
@@ -125,6 +136,7 @@ elements: |-
         '#options':
           'Yes': 'Yes'
           'No': 'No'
+        '#required': true
       type_of_device:
         '#type': select
         '#title': 'Type of Device'
@@ -135,21 +147,29 @@ elements: |-
           'IoT and Smart Devices': 'IoT and Smart Devices'
           'Automotive Communication and Infotainment Equipment': 'Automotive Communication and Infotainment Equipment'
           'Radio and Wireless Communication Equipment': 'Radio and Wireless Communication Equipment'
+        '#required': true
     flexbox_03:
       '#type': webform_flexbox
       manufacturer:
         '#type': textfield
         '#title': Manufacturer
         '#description': '<p>E.g. Apple, Samsung, LG etc</p>'
+        '#required': true
       model:
         '#type': textfield
         '#title': Model
         '#description': '<p>E.g. iPhone 13 Pro Max, Samsung Galaxy S9 etc</p>'
+        '#required': true
     flexbox_04:
       '#type': webform_flexbox
       origin:
         '#type': textfield
         '#title': Origin
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
+        '#required': true
     flexbox_05:
       '#type': webform_flexbox
       frequency_range:
@@ -162,6 +182,7 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
+        '#required': true
       itu_emission_code:
         '#type': textfield
         '#title': 'ITU Emission Code'
@@ -172,6 +193,7 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
+        '#required': true
     flexbox_06:
       '#type': webform_flexbox
       modulation:
@@ -184,6 +206,7 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
+        '#required': true
       power_output:
         '#type': textfield
         '#title': 'Power Output'
@@ -194,6 +217,7 @@ elements: |-
             - xor
             - ':input[name="type_of_device"]':
                 value: 'Radio Transceiver'
+        '#required': true
     intended_use_in_kiribati_select:
       '#type': select
       '#title': 'Intended Use in Kiribati'
@@ -216,6 +240,7 @@ elements: |-
       quantity_of_device:
         '#type': number
         '#title': 'Quantity of Device'
+        '#required': true
       custom_entry_point:
         '#type': select
         '#title': 'Location of Parcel'
@@ -224,6 +249,7 @@ elements: |-
           'Customs Bonriki': 'Customs Bonriki'
           'DHL Tobaraoi': 'DHL Tobaraoi'
           'Postal Office Bairiki': 'Postal Office Bairiki'
+        '#required': true
   supporting_documents:
     '#type': webform_section
     '#title': 'Supporting Documents'
@@ -233,6 +259,7 @@ elements: |-
         '#type': webform_document_file
         '#title': 'Test Report(s) (ACMA, CE, FCC, ITU) '
         '#max_filesize': '25'
+        '#required': true
       declaration_of_conformity_certificate:
         '#type': webform_document_file
         '#title': 'Declaration of Conformity / Certificate'
@@ -241,6 +268,7 @@ elements: |-
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
         '#max_filesize': '25'
+        '#required': true
     flexbox_08:
       '#type': webform_flexbox
       copy_of_labeling_marking:
@@ -251,6 +279,7 @@ elements: |-
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
         '#max_filesize': '25'
+        '#required': true
       operating_manual_catalogue:
         '#type': webform_document_file
         '#title': 'Operating Manual / Catalogue'
@@ -259,6 +288,7 @@ elements: |-
             ':input[name="type_of_applicant"]':
               value: 'International Customer'
         '#max_filesize': '25'
+        '#required': true
     description_of_repair_services_in_kiribati:
       '#type': textarea
       '#title': 'Description of Repair Services in Kiribati'
@@ -304,6 +334,7 @@ elements: |-
       '#access_view_roles':
         - administrator
         - application_manager
+      '#required': true
     fee:
       '#type': select
       '#title': Fee

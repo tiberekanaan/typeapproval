@@ -2,7 +2,7 @@ _core:
   default_config_hash: HlN7eAN2N4JIHsYv56V4E7sqC9bS609KwvGFjyD_mgk
 langcode: en
 uuid: 1062da6a-b2d2-4c43-8bfa-9a6bc3c11ead
-name: 'Type Approval Management System'
+name: 'Type Approval'
 mail: kanaan.ngutu@gmail.com
 slogan: ''
 page:
