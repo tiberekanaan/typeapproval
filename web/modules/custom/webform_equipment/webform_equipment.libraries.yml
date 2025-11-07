@@ -1,0 +1,4 @@
+equipment.styles:
+  css:
+    component:
+      css/equipment.webform.css: {}

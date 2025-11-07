@@ -1,0 +1,41 @@
+/* Webform Equipment: improve spacing and flex layout inside composite, esp. in multiple table rows */
+
+/* Ensure flexbox wrappers render as flex containers even when used inside table cells */
+.webform-submission-form .webform-flex,
+.webform-submission-form .webform-flex--container,
+.webform-submission-form .webform-flexbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* consistent spacing between items */
+}
+
+/* Add the canonical class to our flexbox containers when theme relies on it */
+.webform-submission-form .webform-flexbox {
+  /* utility to mimic the .webform-flex--container spacing behavior */
+  --webform-flex-gap: 1rem;
+}
+
+/* Remove double top margins between adjacent .form-item in multiple table rows */
+.webform-multiple-table td .form-item + .form-item {
+  margin-top: 0; /* override core table stacked spacing */
+}
+
+/* Inside flex containers, form-items should not stack with extra margins */
+.webform-multiple-table td .webform-flexbox .form-item,
+.webform-multiple-table td .webform-flex .form-item {
+  margin-top: 0;
+}
+
+/* Make flex items grow nicely on larger screens while stacking on small */
+.webform-submission-form .webform-flexbox > .form-item,
+.webform-submission-form .webform-flexbox > .form-wrapper,
+.webform-submission-form .webform-flexbox > .container-inline {
+  flex: 1 1 300px;
+  min-width: 240px;
+}
+
+/* Keep document file elements aligned */
+.webform-submission-form .webform-flexbox .js-form-managed-file,
+.webform-submission-form .webform-flexbox .form-managed-file {
+  width: 100%;
+}

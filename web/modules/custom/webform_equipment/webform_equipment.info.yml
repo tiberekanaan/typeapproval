@@ -1,0 +1,7 @@
+name: 'Webform Equipment'
+type: module
+description: 'Provides a custom composite webform element: Equipment.'
+core_version_requirement: '^9 || ^10 || ^11'
+package: 'Webform'
+dependencies:
+  - drupal:webform

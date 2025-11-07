@@ -41,6 +41,7 @@ module:
   entity: 0
   entity_print: 0
   entity_print_views: 0
+  entity_reference_revisions: 0
   feeds: 0
   feeds_log: 0
   field: 0
@@ -108,6 +109,7 @@ module:
   webform_entity_print: 0
   webform_entity_print_attachment: 0
   webform_entity_reference_exclude: 0
+  webform_equipment: 0
   webform_image_select: 0
   webform_node: 0
   webform_options_custom: 0

@@ -76,6 +76,7 @@
         "drupal/mailsystem": "^4",
         "drupal/menu_link_attributes": "^1.5",
         "drupal/metatag": "^2",
+        "drupal/paragraphs": "^1.19",
         "drupal/pathauto": "^1.13",
         "drupal/phone_international": "^4.0",
         "drupal/profile": "^1.12",

@@ -1,4 +1,4 @@
-uuid: e1c06f6f-a78a-4bd2-a0f0-cb4f116499ea
+uuid: 902024ac-e832-432d-bfd8-f2d489ac76ee
 langcode: en
 status: open
 dependencies:
@@ -21,8 +21,8 @@ close: null
 uid: 1
 template: false
 archive: false
-id: type_approval_application_form
-title: 'Type Approval Application Form'
+id: type_approval_application_form_2
+title: 'Type Approval Application Form 2'
 description: ''
 categories: {  }
 elements: |-
@@ -138,212 +138,11 @@ elements: |-
               value: 'International Customer'
         '#international': true
         '#telephone_validation_format': '0'
-  device_and_import_information:
-    '#type': webform_section
-    '#title': 'Device and Import Information'
-    flexbox_13:
-      '#type': webform_flexbox
-      have_you_review_the_list_of_approved_devices:
-        '#type': select
-        '#title': 'Has Your Device Been Approved?'
-        '#description': '<p>Please refer to the <a href="/list-approved-devices">List of Approved Devices</a> to see if you device has been approved or not.</p>'
-        '#options':
-          'Yes': 'Yes'
-          'No': 'No'
-        '#required': true
-      type_of_device:
-        '#type': select
-        '#title': 'Type of Device'
-        '#options':
-          'Broadband Terminal Equipment': 'Broadband Terminal Equipment'
-          'Fixed Telecommunications Equipment': 'Fixed Telecommunications Equipment'
-          'Fixed Wireless Terminal Equipment': 'Fixed Wireless Terminal Equipment'
-          'IoT and Smart Devices': 'IoT and Smart Devices'
-          'Automotive Communication and Infotainment Equipment': 'Automotive Communication and Infotainment Equipment'
-          'Radio and Wireless Communication Equipment': 'Radio and Wireless Communication Equipment'
-        '#required': true
-    flexbox_03:
-      '#type': webform_flexbox
-      manufacturer:
-        '#type': textfield
-        '#title': Manufacturer
-        '#description': '<p>E.g. Apple, Samsung, LG etc</p>'
-        '#required': true
-      model:
-        '#type': textfield
-        '#title': Model
-        '#description': '<p>E.g. iPhone 13 Pro Max, Samsung Galaxy S9 etc</p>'
-        '#required': true
-    flexbox_04:
-      '#type': webform_flexbox
-      origin:
-        '#type': textfield
-        '#title': Origin
-        '#states':
-          visible:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-          required:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-    flexbox_05:
-      '#type': webform_flexbox
-      frequency_range:
-        '#type': textfield
-        '#title': 'Frequency Range'
-        '#states':
-          visible:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-          required:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-      itu_emission_code:
-        '#type': textfield
-        '#title': 'ITU Emission Code'
-        '#states':
-          visible:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-          required:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-    flexbox_06:
-      '#type': webform_flexbox
-      modulation:
-        '#type': textfield
-        '#title': Modulation
-        '#states':
-          visible:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-          required:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-      power_output:
-        '#type': textfield
-        '#title': 'Power Output'
-        '#states':
-          visible:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-          required:
-            - ':input[name="type_of_device"]':
-                value: Satellite
-            - xor
-            - ':input[name="type_of_device"]':
-                value: 'Radio Transceiver'
-    intended_use_in_kiribati_select:
-      '#type': select
-      '#title': 'Intended Use in Kiribati'
-      '#options':
-        'For Sale': 'For Sale'
-        'For Personal Use': 'For Personal Use'
-      '#states':
-        visible:
-          ':input[name="type_of_applicant"]':
-            value: 'Local Customer'
-  quantity_entry_point:
-    '#type': webform_section
-    '#title': 'Quantity & Entry Point'
-    '#states':
-      visible:
-        ':input[name="type_of_applicant"]':
-          value: 'Local Customer'
-    flexbox_12:
-      '#type': webform_flexbox
-      quantity_of_device:
-        '#type': number
-        '#title': 'Quantity of Device'
-        '#states':
-          required:
-            ':input[name="type_of_applicant"]':
-              value: 'Local Customer'
-      custom_entry_point:
-        '#type': select
-        '#title': 'Location of Parcel'
-        '#options':
-          'Customs Betio': 'Customs Betio'
-          'Customs Bonriki': 'Customs Bonriki'
-          'DHL Tobaraoi': 'DHL Tobaraoi'
-          'Postal Office Bairiki': 'Postal Office Bairiki'
-        '#states':
-          required:
-            ':input[name="type_of_applicant"]':
-              value: 'Local Customer'
-  supporting_documents:
-    '#type': webform_section
-    '#title': 'Supporting Documents'
-    flexbox_07:
-      '#type': webform_flexbox
-      test_report_s_acma_ce_fcc_itu:
-        '#type': webform_document_file
-        '#title': 'Test Report(s) (ACMA, CE, FCC, ITU) '
-        '#max_filesize': '25'
-        '#required': true
-      declaration_of_conformity_certificate:
-        '#type': webform_document_file
-        '#title': 'Declaration of Conformity / Certificate'
-        '#states':
-          visible:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-          required:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-        '#max_filesize': '25'
-    flexbox_08:
-      '#type': webform_flexbox
-      copy_of_labeling_marking:
-        '#type': webform_document_file
-        '#title': 'Copy of Labeling / Marking'
-        '#states':
-          visible:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-          required:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-        '#max_filesize': '25'
-      operating_manual_catalogue:
-        '#type': webform_document_file
-        '#title': 'Operating Manual / Catalogue'
-        '#states':
-          visible:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-          required:
-            ':input[name="type_of_applicant"]':
-              value: 'International Customer'
-        '#max_filesize': '25'
-    description_of_repair_services_in_kiribati:
-      '#type': textarea
-      '#title': 'Description of Repair Services in Kiribati'
-      '#states':
-        visible:
-          ':input[name="type_of_applicant"]':
-            value: 'Local Customer'
+  equipments:
+    '#type': equipment
+    '#title': Equipments
+    '#multiple': 10
+    '#required': true
   admin_action:
     '#type': webform_section
     '#title': 'Admin Action'
