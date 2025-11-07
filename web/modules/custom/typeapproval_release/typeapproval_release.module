@@ -7,6 +7,8 @@ use Drupal\webform\WebformSubmissionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\profile\Entity\ProfileInterface;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\user\UserInterface;
+use Drupal\user\Entity\Role;
 
 /**
  * Enforce $0 fee and disable Fee field for repeat submissions.
@@ -622,4 +624,28 @@ function typeapproval_release_mail($key, &$message, $params) {
       $message['body'] = [is_array($body) ? implode("\n", $body) : (string) $body];
       break;
   }
+}
+
+/**
+ * Implements hook_user_presave().
+ *
+ * Assign the "applicant" role to all newly registered users by default.
+ */
+function typeapproval_release_user_presave(UserInterface $account) {
+  // Only act on brand new users.
+  if (!$account->isNew()) {
+    return;
+  }
+  // Do nothing if the role is already present.
+  if ($account->hasRole('applicant')) {
+    return;
+  }
+  // Ensure the role exists before assigning.
+  $role = Role::load('applicant');
+  if (!$role) {
+    \Drupal::logger('typeapproval_release')->warning('Cannot auto-assign role: "applicant" role does not exist.');
+    return;
+  }
+  // Assign the role; no explicit save needed in presave hook.
+  $account->addRole('applicant');
 }
