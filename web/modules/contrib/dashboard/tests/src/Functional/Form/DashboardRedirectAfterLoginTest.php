@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\dashboard\Functional\Form;
 
+use PHPUnit\Framework\Attributes\Group;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\dashboard\Entity\Dashboard;
 
 /**
  * Test for dashboard redirects after login.
- *
- * @group dashboard
  */
+#[Group('dashboard')]
 class DashboardRedirectAfterLoginTest extends BrowserTestBase {
 
   /**

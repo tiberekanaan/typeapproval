@@ -2,30 +2,27 @@
 
 namespace Drupal\RecipeKit\Installer\Form;
 
-use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Checkboxes;
-use Drupal\RecipeKit\Installer\FormInterface as InstallerFormInterface;
 
 /**
  * Provides a form to choose optional add-on recipes.
  */
-final class RecipesForm extends FormBase implements InstallerFormInterface {
+final class RecipesForm extends RecipeSelectionFormBase {
 
   /**
    * {@inheritdoc}
    */
   public static function toInstallTask(array $install_state): array {
-    // Skip this form if optional recipes have already been chosen, or if the
-    // profile doesn't define any optional recipe groups.
-    if (array_key_exists('recipes', $install_state['parameters']) || empty($install_state['profile_info']['recipes']['optional'])) {
-      $run = INSTALL_TASK_SKIP;
+    // Skip this form if the profile doesn't define any optional recipe groups.
+    if (empty($install_state['profile_info']['recipes']['optional'])) {
+      $install_state['parameters']['add_ons'] = INSTALL_TASK_SKIP;
     }
     return [
       'display_name' => t('Choose add-ons'),
       'type' => 'form',
-      'run' => $run ?? INSTALL_TASK_RUN_IF_REACHED,
-      'function' => static::class,
+      'run' => $install_state['parameters']['add_ons'] ?? INSTALL_TASK_RUN_IF_REACHED,
+      'function' => self::class,
     ];
   }
 
@@ -40,29 +37,8 @@ final class RecipesForm extends FormBase implements InstallerFormInterface {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?array $install_state = NULL): array {
-    assert(is_array($install_state));
-
-    $flavors = self::getFlavors($install_state);
-    $form['add_ons'] = [
-      '#type' => 'checkboxes',
-      '#value_callback' => static::class . '::valueCallback',
-      '#options' => array_combine(array_keys($flavors), array_column($flavors, 'name')),
-    ];
-    $form['actions'] = [
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Next'),
-        '#button_type' => 'primary',
-        '#op' => 'submit',
-      ],
-      'skip' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Skip this step'),
-        '#op' => 'skip',
-      ],
-      '#type' => 'actions',
-    ];
-    $form['#title'] = '';
+    $form = parent::buildForm($form, $form_state);
+    $form['add_ons']['#value_callback'] = self::class . '::valueCallback';
     return $form;
   }
 
@@ -71,24 +47,11 @@ final class RecipesForm extends FormBase implements InstallerFormInterface {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     global $install_state;
-    $list = [];
-    $flavors = self::getFlavors($install_state);
+    parent::submitForm($form, $form_state);
 
-    $pressed_button = $form_state->getTriggeringElement();
-    // Only choose add-ons if the Next button was pressed, or if the form was
-    // submitted programmatically (i.e., by `drush site:install`).
-    if (($pressed_button && $pressed_button['#op'] === 'submit') || $form_state->isProgrammed()) {
-      $chosen_flavors = $form_state->getValue('add_ons', []);
-      $chosen_flavors = array_filter($chosen_flavors);
-      foreach ($chosen_flavors as $key) {
-        $list = array_merge($list, $flavors[$key]['packages']);
-      }
-    }
-    // A NULL parameter will simply be encoded into the URL query string like
-    // `?site_name=Foo&recipes`, which will satisfy the `array_key_exists()`
-    // check in ::toInstallTask() when the query string is decoded.
-    // @see \Drupal\Component\Utility\UrlHelper::buildQuery()
-    $install_state['parameters']['recipes'] = $list ? array_unique($list) : NULL;
+    // Indicate that we're done with this form.
+    // @see ::toInstallTask()
+    $install_state['parameters']['add_ons'] = INSTALL_TASK_SKIP;
   }
 
   public static function valueCallback(&$element, $input, FormStateInterface $form_state): array {
@@ -104,23 +67,31 @@ final class RecipesForm extends FormBase implements InstallerFormInterface {
     return Checkboxes::valueCallback($element, $input, $form_state);
   }
 
-  private static function getFlavors(array $install_state): array {
-    $flavors = [];
+  /**
+   * {@inheritdoc}
+   */
+  protected function getChoices(): iterable {
+    global $install_state;
+    $choices = [];
 
     foreach ($install_state['profile_info']['recipes']['optional'] ?? [] as $key => $value) {
-      // For backwards compatibility, each flavor can either be a flat array of
+      // For backwards compatibility, each choice can either be a flat array of
       // package names (in which case the key is the human-readable name), or
       // it can be an associative array with `name` and `packages` elements (the
       // best practice).
       if (array_is_list($value)) {
-        $value = ['name' => $key, 'packages' => $value];
+        $value = [
+          'name' => $key,
+          'packages' => $value,
+          'description' => NULL,
+        ];
       }
       // Allow the name to be a translatable string, which won't happen unless
       // we pass it through the translation system.
       $value['name'] = t($value['name']);
-      $flavors[$key] = $value;
+      $choices[$key] = $value;
     }
-    return $flavors;
+    return $choices;
   }
 
 }

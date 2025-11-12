@@ -7,10 +7,11 @@ namespace Drupal\Tests\drupal_cms_privacy_basic\Functional;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
-/**
- * @group drupal_cms_privacy_basic
- */
+#[Group('drupal_cms_privacy_basic')]
+#[IgnoreDeprecations]
 class ComponentValidationTest extends BrowserTestBase {
 
   use RecipeTestTrait;

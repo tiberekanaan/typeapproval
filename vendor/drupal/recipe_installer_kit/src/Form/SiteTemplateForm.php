@@ -2,32 +2,27 @@
 
 namespace Drupal\RecipeKit\Installer\Form;
 
-use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Recipe\Recipe;
 use Drupal\Core\Recipe\RecipeFileException;
-use Drupal\RecipeKit\Installer\FormInterface as InstallerFormInterface;
+use Drupal\Core\Render\Element;
 use Drupal\RecipeKit\Installer\Hooks;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Provides a form to choose a site template.
  */
-final class SiteTemplateForm extends FormBase implements InstallerFormInterface {
+final class SiteTemplateForm extends RecipeSelectionFormBase {
 
   /**
    * {@inheritdoc}
    */
   public static function toInstallTask(array $install_state): array {
-    // Skip this form if optional recipes have already been chosen.
-    if (array_key_exists('recipes', $install_state['parameters'])) {
-      $run = INSTALL_TASK_SKIP;
-    }
     return [
       'display_name' => t('Choose site template'),
       'type' => 'form',
-      'run' => $run ?? INSTALL_TASK_RUN_IF_REACHED,
-      'function' => static::class,
+      'run' => $install_state['parameters']['template'] ?? INSTALL_TASK_RUN_IF_REACHED,
+      'function' => self::class,
     ];
   }
 
@@ -38,61 +33,66 @@ final class SiteTemplateForm extends FormBase implements InstallerFormInterface 
     return 'installer_site_template_form';
   }
 
-  private function getAvailableSiteTemplates(): iterable {
+  /**
+   * {@inheritdoc}
+   */
+  protected function getChoices(): iterable {
+    $choices = [];
     $dir = Hooks::getRecipePath();
 
-    $finder = Finder::create()->in($dir)->files()->name('recipe.yml');
+    $finder = Finder::create()
+      ->in($dir)
+      ->files()
+      ->followLinks()
+      ->name('recipe.yml');
+
     foreach ($finder as $file) {
       try {
         $recipe = Recipe::createFromDirectory($file->getPath());
         if ($recipe->type === 'Site') {
-          yield $recipe;
+          $name = basename($recipe->path);
+          $choices[$name] = [
+            'name' => $recipe->name,
+            // @todo Make this work with recipes that don't have the `drupal`
+            // vendor prefix.
+            'packages' => ["drupal/$name"],
+            'description' => $recipe->description,
+          ];
         }
       }
-      catch (RecipeFileException) {
-        // The recipe file isn't valid, so ignore it.
+      catch (RecipeFileException $e) {
+        $this->messenger()->addError($e->getMessage());
       }
     }
+    return $choices;
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?array $install_state = NULL): array {
-    $form['template'] = [
-      '#type' => 'radios',
-      // @todo Make this non-required, with some way to choose a default.
-      '#required' => TRUE,
-      '#required_error' => $this->t('You must choose a site template.'),
-    ];
-    foreach ($this->getAvailableSiteTemplates() as $recipe) {
-      // @todo Make this work with recipes that don't have the `drupal/`
-      // vendor prefix.
-      $name = 'drupal/' . basename($recipe->path);
-      $form['template']['#options'][$name] = $recipe->name;
-    }
-    // If installing non-interactively (i.e., `drush site:install`), default to
-    // the first available template.
-    if (empty($install_state['interactive'])) {
-      $form['template']['#default_value'] = key($form['template']['#options']);
-    }
-
-    $form['actions'] = [
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Next'),
-        '#button_type' => 'primary',
-        '#op' => 'submit',
-      ],
-      'skip' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Skip this step'),
-        '#op' => 'skip',
-      ],
-      '#type' => 'actions',
-    ];
-    $form['#title'] = '';
+    $form = parent::buildForm($form, $form_state);
+    $form['add_ons']['#type'] = 'radios';
+    $form['add_ons']['#after_build'][] = [self::class, 'postBuildAddOns'];
+    $form['#title'] = $this->t('Choose a site template');
     return $form;
+  }
+
+  /**
+   * An #after_build callback for the `add_ons` element.
+   *
+   * @param array $element
+   *   The element.
+   *
+   * @return array
+   *   The modified element.
+   */
+  public static function postBuildAddOns(array $element): array {
+    foreach (Element::children($element) as $key) {
+      // Allow a more specific theme hook for more detailed theming.
+      $element[$key]['#theme_wrappers'] = ['form_element__site_template'];
+    }
+    return $element;
   }
 
   /**
@@ -100,15 +100,11 @@ final class SiteTemplateForm extends FormBase implements InstallerFormInterface 
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     global $install_state;
+    parent::submitForm($form, $form_state);
 
-    $pressed_button = $form_state->getTriggeringElement();
-    // Only choose the template if the Next button was pressed, or if the form
-    // was submitted programmatically (i.e., by `drush site:install`).
-    if (($pressed_button && $pressed_button['#op'] === 'submit') || $form_state->isProgrammed()) {
-      $install_state['parameters']['recipes'] = [
-        $form_state->getValue('template'),
-      ];
-    }
+    // Indicate that we're done with this form.
+    // @see ::toInstallTask()
+    $install_state['parameters']['template'] = INSTALL_TASK_SKIP;
   }
 
 }

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Dashboard\Kernel;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests for dashboard block definition for integrations.
- *
- * @group dashboard
  */
+#[Group('dashboard')]
 class DashboardBlockDefinitionsTest extends KernelTestBase {
 
   /**
@@ -25,9 +26,8 @@ class DashboardBlockDefinitionsTest extends KernelTestBase {
 
   /**
    * Tests which blocks are allowed in navigation.
-   *
-   * @dataProvider blockProvider
    */
+  #[DataProvider('blockProvider')]
   public function testBlockDefinitions($block_id, $allowed_in_navigation, $allowed_in_block_ui): void {
     /** @var \Drupal\Core\Block\BlockManagerInterface $block_manager */
     $block_manager = $this->container->get(BlockManagerInterface::class);

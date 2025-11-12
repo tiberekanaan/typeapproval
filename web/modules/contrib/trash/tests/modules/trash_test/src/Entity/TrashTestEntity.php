@@ -3,6 +3,8 @@
 namespace Drupal\trash_test\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityTypeInterface;
 
 /**
  * Provides a trash test entity.
@@ -39,5 +41,20 @@ use Drupal\Core\Entity\ContentEntityBase;
  * )
  */
 class TrashTestEntity extends ContentEntityBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+    $fields = parent::baseFieldDefinitions($entity_type);
+
+    $fields['reference'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Reference'))
+      ->setDescription(t('Reference to another TrashTestEntity.'))
+      ->setSetting('target_type', 'trash_test_entity')
+      ->setRequired(FALSE);
+
+    return $fields;
+  }
 
 }

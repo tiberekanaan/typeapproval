@@ -7,7 +7,11 @@ namespace Drupal\Tests\drupal_cms_page\Functional;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
+#[Group('drupal_cms_page')]
+#[IgnoreDeprecations]
 class StandardTest extends BrowserTestBase {
 
   use RecipeTestTrait;

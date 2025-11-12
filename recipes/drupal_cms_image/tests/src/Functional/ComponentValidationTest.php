@@ -7,10 +7,11 @@ namespace Drupal\Tests\drupal_cms_image\Functional;
 use Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
-/**
- * @group drupal_cms_image
- */
+#[Group('drupal_cms_image')]
+#[IgnoreDeprecations]
 class ComponentValidationTest extends BrowserTestBase {
 
   use RecipeTestTrait;

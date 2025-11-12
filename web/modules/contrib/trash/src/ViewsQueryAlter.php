@@ -63,31 +63,25 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
       return;
     }
 
-    // Find out what entity types are represented in this query.
-    $entity_type_definitions = $this->entityTypeManager->getDefinitions();
-    foreach ($query->relationships as $relationship_table => $info) {
-      if (!array_key_exists('base', $info) || !$info['base']) {
+    // Add a deleted condition for every entity table in the query that has
+    // trash enabled.
+    foreach ($query->getEntityTableInfo() as $info) {
+      // Skip entity types without trash integration.
+      if (!$this->trashManager->isEntityTypeEnabled($info['entity_type'])) {
         continue;
       }
 
-      $table_data = $this->viewsData->get($info['base']);
+      $deleted_table_alias = $info['alias'];
 
-      // Skip non-entity tables and entity types without trash integration.
-      if (empty($table_data['table']['entity type'])
-        || !$this->trashManager->isEntityTypeEnabled($entity_type_definitions[$table_data['table']['entity type']])) {
-        continue;
-      }
-      $entity_type_id = $table_data['table']['entity type'];
-      $deleted_table_name = $relationship_table;
-
-      // This is a revision table, we need to join and use the data table which
-      // holds the relevant "deleted" state.
-      if ($table_data['table']['entity revision']) {
-        $id_key = $entity_type_definitions[$entity_type_id]->getKey('id');
-        $data_table = $table_data[$id_key]['relationship']['base'] ?? NULL;
+      // If this is a revision table, we need to join and use the data table
+      // which holds the relevant "deleted" state.
+      if ($info['revision']) {
+        $entity_type = $this->entityTypeManager->getDefinition($info['entity_type']);
+        $id_key = $entity_type->getKey('id');
+        $data_table = $entity_type->getDataTable() ?? $entity_type->getBaseTable();
 
         if (empty($data_table)) {
-          throw new \UnexpectedValueException("Missing data table relationship for the {$info['base']} table.");
+          throw new \UnexpectedValueException("Missing data table for the {$info['base']} revision table.");
         }
 
         $definition = [
@@ -99,10 +93,10 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
         ];
         $join = $this->joinHandler->createInstance('standard', $definition);
 
-        $deleted_table_name = $query->addTable($data_table, NULL, $join);
+        $deleted_table_alias = $query->addTable($data_table, $info['alias'], $join);
       }
 
-      $this->alterQueryForEntityType($query, $entity_type_id, $deleted_table_name);
+      $this->alterQueryForEntityType($query, $info['entity_type'], $deleted_table_alias);
     }
   }
 
@@ -116,10 +110,10 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
    *   The query plugin object for the query.
    * @param string $entity_type_id
    *   The entity type ID.
-   * @param string $deleted_table_name
-   *   The name of the data table which holds the 'deleted' column.
+   * @param string $deleted_table_alias
+   *   The alias of the data table which holds the 'deleted' column.
    */
-  protected function alterQueryForEntityType(Sql $query, string $entity_type_id, string $deleted_table_name): void {
+  protected function alterQueryForEntityType(Sql $query, string $entity_type_id, string $deleted_table_alias): void {
     $storage = $this->entityTypeManager->getStorage($entity_type_id);
     assert($storage instanceof SqlEntityStorageInterface);
     $table_mapping = $storage->getTableMapping();
@@ -129,15 +123,14 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
     // Try to find out whether any filter (normal or conditional filter) filters
     // by the delete column. In case it does opt out of adding a specific
     // delete column.
-    $deleted_table_names = $table_mapping->getAllFieldTableNames('deleted');
     $deleted_table_column = $table_mapping->getFieldColumnName($field_storage_definitions['deleted'], 'value');
 
-    $has_delete_condition = $this->hasDeleteCondition($query, $deleted_table_names, $deleted_table_column);
+    $has_delete_condition = $this->hasDeleteCondition($query, $deleted_table_alias, $deleted_table_column);
 
     // If we couldn't find any condition that filters out explicitly on deleted,
     // ensure that we just return not deleted entities.
     if (!$has_delete_condition) {
-      $query->addWhere(0, "{$deleted_table_name}.{$deleted_table_column}", NULL, 'IS NULL');
+      $query->addWhere(0, "{$deleted_table_alias}.{$deleted_table_column}", NULL, 'IS NULL');
       $query->addTag('trash_altered');
     }
     // Otherwise ignore trash for the duration of this view, so it can load and
@@ -153,8 +146,8 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
    *
    * @param \Drupal\views\Plugin\views\query\Sql $query
    *   The query plugin object for the query.
-   * @param array $deleted_table_names
-   *   List of table names with delete column.
+   * @param string $deleted_table_alias
+   *   The alias of the table to check.
    * @param string $deleted_table_column
    *   Name of delete column.
    *
@@ -162,32 +155,16 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
    *   <code>TRUE</code> if the query has a delete condition, <code>FALSE</code>
    *   otherwise.
    */
-  protected function hasDeleteCondition(Sql $query, array $deleted_table_names, string $deleted_table_column): bool {
-    if (count($deleted_table_names) === 0) {
-      return FALSE;
-    }
-    // Get aliases of all tables involved in the query having the "deleted"
-    // field.
-    $aliases = array_keys(array_filter($query->getTableQueue(), function ($table_info) use ($deleted_table_names) {
-      return in_array($table_info['table'], $deleted_table_names, TRUE);
-    }));
-    if (count($aliases) === 0) {
-      return FALSE;
-    }
+  protected function hasDeleteCondition(Sql $query, string $deleted_table_alias, string $deleted_table_column): bool {
     foreach ($query->where as $group) {
       foreach ($group['conditions'] as $condition) {
         if (!isset($condition['field']) || !is_string($condition['field'])) {
           continue;
         }
-        // Look through all the tables involved in the query, and check for
-        // those that might contain the 'deleted' column, either the data or
-        // revision data table.
-        foreach ($aliases as $alias) {
-          // Note: We use strpos because views for some reason has a field
-          // looking like "trash_test.Deleted > 0".
-          if (strpos($condition['field'], "{$alias}.{$deleted_table_column}") !== FALSE) {
-            return TRUE;
-          }
+        // Note: We use strpos because views for some reason has a field
+        // looking like "trash_test.Deleted > 0".
+        if (strpos($condition['field'], "{$deleted_table_alias}.{$deleted_table_column}") !== FALSE) {
+          return TRUE;
         }
       }
     }

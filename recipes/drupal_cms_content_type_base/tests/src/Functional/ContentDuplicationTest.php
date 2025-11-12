@@ -7,10 +7,12 @@ namespace Drupal\Tests\drupal_cms_content_type_base\Functional;
 use Composer\InstalledVersions;
 use Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
+use PHPUnit\Framework\Attributes\TestWith;
 
-/**
- * @group drupal_cms_content_type_base
- */
+#[Group('drupal_cms_content_type_base')]
+#[IgnoreDeprecations]
 class ContentDuplicationTest extends BrowserTestBase {
 
   use RecipeTestTrait;
@@ -34,15 +36,13 @@ class ContentDuplicationTest extends BrowserTestBase {
     $this->drupalPlaceBlock('local_tasks_block');
   }
 
-  /**
-   * @testWith ["drupal/drupal_cms_blog", "blog"]
-   *   ["drupal/drupal_cms_case_study", "case_study"]
-   *   ["drupal/drupal_cms_events", "event"]
-   *   ["drupal/drupal_cms_news", "news"]
-   *   ["drupal/drupal_cms_page", "page"]
-   *   ["drupal/drupal_cms_person", "person"]
-   *   ["drupal/drupal_cms_project", "project"]
-   */
+  #[TestWith(['drupal/drupal_cms_blog', 'blog'])]
+  #[TestWith(['drupal/drupal_cms_case_study', 'case_study'])]
+  #[TestWith(['drupal/drupal_cms_events', 'event'])]
+  #[TestWith(['drupal/drupal_cms_news', 'news'])]
+  #[TestWith(['drupal/drupal_cms_page', 'page'])]
+  #[TestWith(['drupal/drupal_cms_person', 'person'])]
+  #[TestWith(['drupal/drupal_cms_project', 'project'])]
   public function testContentDuplication(string $recipe_name, string $content_type): void {
     $dir = InstalledVersions::getInstallPath($recipe_name);
     $this->applyRecipe($dir);

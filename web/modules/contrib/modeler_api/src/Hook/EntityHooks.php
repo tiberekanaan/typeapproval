@@ -220,6 +220,10 @@ class EntityHooks {
                 'type' => 'string',
                 'label' => 'ID',
               ],
+              'storage' => [
+                'type' => 'string',
+                'label' => 'Override system-wide storage setting',
+              ],
               'data' => [
                 'type' => 'string',
                 'label' => 'Raw data, or an md5 hash of the raw data if that is stored externally',

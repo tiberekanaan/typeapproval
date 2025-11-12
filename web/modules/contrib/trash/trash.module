@@ -66,7 +66,6 @@ function trash_restore_entity(EntityInterface $entity): void {
   }
 
   $storage = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
-  // @phpstan-ignore-next-line
   $storage->restoreFromTrash([$entity]);
 }
 
@@ -170,6 +169,15 @@ function trash_entity_query_alter(QueryInterface $query): void {
 function trash_query_search_node_search_alter(AlterableInterface $query) {
   // @phpstan-ignore-next-line
   \Drupal::service('trash.manager')->getHandler('node')?->querySearchNodeSearchAlter($query);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for the 'redirect' entity type.
+ */
+#[LegacyHook]
+function trash_redirect_presave(EntityInterface $entity) {
+  // @phpstan-ignore-next-line
+  \Drupal::service('trash.manager')->getHandler('redirect')?->preSave($entity);
 }
 
 /**

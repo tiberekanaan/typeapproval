@@ -41,6 +41,11 @@ services:
   trash.uninstall_validator:
     class: Drupal\trash\TrashUninstallValidator
     arguments: ['@entity_type.manager', '@trash.manager']
+    # todo: Enable autoconfigure and remove tag and lazy once we drop d10 support.
+    # See https://www.drupal.org/project/drupal/issues/3432595.
+    lazy: true
+    tags:
+      - { name: module_install.uninstall_validator }
 
   # Trash handlers.
   trash.handler_configurator:
@@ -56,3 +61,10 @@ services:
     tags:
       - { name: trash_handler, entity_type_id: menu_link_content }
       - { name: event_subscriber }
+  Drupal\trash\Hook\TrashHandler\RedirectTrashHandler:
+    tags:
+      - { name: trash_handler, entity_type_id: redirect }
+  Drupal\trash\Hook\TrashHandler\PathAliasTrashHandler:
+    autowire: true
+    tags:
+      - { name: trash_handler, entity_type_id: path_alias }

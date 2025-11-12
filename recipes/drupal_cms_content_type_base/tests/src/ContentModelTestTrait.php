@@ -15,6 +15,29 @@ use PHPUnit\Framework\Assert;
 trait ContentModelTestTrait {
 
   /**
+   * Asserts generic things about a content type add/edit form.
+   *
+   * @param string $node_type
+   *   A content type ID.
+   */
+  protected function assertEditForm(string $node_type): void {
+    assert($this instanceof BrowserTestBase);
+
+    $account = $this->drupalCreateUser();
+    $account->addRole('content_editor')->save();
+    $this->drupalLogin($account);
+
+    $this->drupalGet('/node/add/' . $node_type);
+    $assert_session = $this->assertSession();
+    // We should have permission to add content, as a content editor.
+    $assert_session->statusCodeEquals(200);
+    // No content type should expose a distinct summary field.
+    $assert_session->fieldNotExists('Summary');
+    // There is only one text format, so there shouldn't be any choice.
+    $assert_session->fieldNotExists('Text format');
+  }
+
+  /**
    * Ensures that the file associated with a file entity, actually exists.
    *
    * @param string $uuid

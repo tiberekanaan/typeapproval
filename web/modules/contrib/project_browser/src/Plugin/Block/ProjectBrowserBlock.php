@@ -32,23 +32,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The source plugin to query for projects.
-   *
-   * @var \Drupal\project_browser\Plugin\ProjectBrowserSourceInterface
-   */
-  private readonly ProjectBrowserSourceInterface $source;
-
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ProjectBrowserSourceManager $sourceManager,
+    private readonly ProjectBrowserSourceManager $sourceManager,
     private readonly ElementInfoManagerInterface $elementInfo,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $source_id = $this->getDerivativeId();
-    $this->source = $sourceManager->getAllEnabledSources()[$source_id];
   }
 
   /**
@@ -82,10 +73,24 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
   }
 
   /**
+   * Tries to load the fully configured source plugin this block shows.
+   *
+   * @return \Drupal\project_browser\Plugin\ProjectBrowserSourceInterface|null
+   *   A source plugin, or NULL if the source is unavailable or disabled.
+   */
+  private function getSource(): ?ProjectBrowserSourceInterface {
+    $source_id = $this->getDerivativeId();
+    assert(is_string($source_id));
+    return $this->sourceManager->getAllEnabledSources()[$source_id] ?? NULL;
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account): AccessResultInterface {
-    return AccessResult::allowedIfHasPermission($account, 'administer modules');
+    $is_enabled = AccessResult::allowedIf($this->getSource() instanceof ProjectBrowserSourceInterface);
+    return AccessResult::allowedIfHasPermission($account, 'administer modules')
+      ->andIf($is_enabled);
   }
 
   /**
@@ -93,6 +98,13 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
    */
   public function blockForm($form, FormStateInterface $form_state): array {
     $form = parent::blockForm($form, $form_state);
+
+    // If we cannot load the source plugin (i.e., it's disabled) there's nothing
+    // for us to do here.
+    $source = $this->getSource();
+    if (empty($source)) {
+      return $form;
+    }
 
     $configuration = $this->getConfiguration();
     $form['paginate'] = [
@@ -107,7 +119,7 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
       '#default_value' => $configuration['page_sizes'],
       '#description' => $this->t('A comma-separated list of choices for how many projects to show per page. Can also be a single number, to only ever show that many projects.'),
     ];
-    $sort_options = $this->source->getSortOptions();
+    $sort_options = $source->getSortOptions();
     $form['sort_options'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Sort options'),
@@ -122,7 +134,7 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
       '#default_value' => $configuration['default_sort'] ?? array_key_first($sort_options),
       '#options' => $sort_options,
     ];
-    $filter_definitions = $this->source->getFilterDefinitions();
+    $filter_definitions = $source->getFilterDefinitions();
     $form['filters'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Enabled filters'),
@@ -176,14 +188,18 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build(): array {
-    $source = $this->getDerivativeId();
-    assert(is_string($source));
+    // If the source plugin is disabled, there's nothing for us to render. This
+    // should never happen (see ::blockAccess()), but we're being defensive.
+    $source = $this->getSource();
+    if (empty($source)) {
+      return [];
+    }
 
     // We don't want to actually load the project browser in preview mode.
     if ($this->inPreview) {
       return [
         '#markup' => $this->t('Project Browser is being rendered in preview mode, so not loading projects. This block uses the %source source.', [
-          '%source' => $this->source->getPluginDefinition()['label'],
+          '%source' => $source->getPluginDefinition()['label'],
         ]),
         // The preview isn't cacheable.
         '#cache' => ['max-age' => 0],
@@ -194,14 +210,14 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
     if (isset($configuration['sort_options'])) {
       // Only show the sort options that are allowed by our configuration.
       $sort_options = array_intersect_key(
-        $this->source->getSortOptions(),
+        $source->getSortOptions(),
         array_flip($configuration['sort_options']),
       );
     }
     if (isset($configuration['filters'])) {
       // Only show the filters that are allowed by our configuration.
       $filters = array_intersect_key(
-        $this->source->getFilterDefinitions(),
+        $source->getFilterDefinitions(),
         array_flip($configuration['filters']),
       );
       // The render element's #filters property expects an associative array
@@ -216,7 +232,7 @@ final class ProjectBrowserBlock extends BlockBase implements ContainerFactoryPlu
 
     return [
       '#type' => 'project_browser',
-      '#source' => $this->source,
+      '#source' => $source,
       '#cache' => [
         'tags' => [
           // This cache tag ensures that when query data for a specific source

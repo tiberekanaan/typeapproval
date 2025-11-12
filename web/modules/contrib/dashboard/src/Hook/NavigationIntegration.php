@@ -78,6 +78,7 @@ class NavigationIntegration {
       'variables' => [
         'url' => [],
         'title' => NULL,
+        'icon' => NULL,
       ],
     ];
     return $items;

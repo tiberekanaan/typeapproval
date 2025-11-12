@@ -65,21 +65,20 @@ final class ProjectBrowserBlockTest extends BrowserTestBase {
   /**
    * Tests that the block only appears if the source is enabled.
    */
-  public function testBlockIsBrokenIfSourceIsDisabled(): void {
+  public function testBlockAccessIfSourceNotEnabled(): void {
     $this->drupalGet('<front>');
     $assertSession = $this->assertSession();
     $assertSession->pageTextContains('Project browser block');
-    $assertSession->pageTextNotContains('This block is broken or missing.');
 
     // Globally disable the source, even though the block's still refers to it.
     $this->config('project_browser.admin_settings')
       ->set('enabled_sources', [])
       ->save();
 
-    // The block should still appear, but it should be broken or missing.
+    // The block should not appear because we cannot access it since the source
+    // has been disabled.
     $this->getSession()->reload();
-    $assertSession->pageTextContains('Project browser block');
-    $assertSession->pageTextContains('This block is broken or missing.');
+    $assertSession->pageTextNotContains('Project browser block');
   }
 
   /**

@@ -295,15 +295,16 @@ class LeafletMap extends StylePluginBase implements ContainerFactoryPluginInterf
       // (i.e. Search API views).
       if (!isset($this->entityType) && $this->moduleHandler->moduleExists('search_api')) {
         $index_id = substr($base_table, 17);
-        $index = Index::load($index_id);
-        foreach ($index->getDatasources() as $datasource) {
-          if ($datasource instanceof DatasourceInterface) {
-            $this->entityType = $datasource->getEntityTypeId();
-            try {
-              $this->entityInfo = $this->entityManager->getDefinition($this->entityType);
-            }
-            catch (\Exception $e) {
-              $this->getLogger('Leaflet View')->warning($e->getMessage());
+        if ($index = Index::load($index_id)) {
+          foreach ($index->getDatasources() as $datasource) {
+            if ($datasource instanceof DatasourceInterface) {
+              $this->entityType = $datasource->getEntityTypeId();
+              try {
+                $this->entityInfo = $this->entityManager->getDefinition($this->entityType);
+              }
+              catch (\Exception $e) {
+                $this->getLogger('Leaflet View')->warning($e->getMessage());
+              }
             }
           }
         }
@@ -1495,7 +1496,11 @@ class LeafletMap extends StylePluginBase implements ContainerFactoryPluginInterf
    */
   protected function processFeatureIcons(array &$feature, array $tokens): void {
     // Set the custom Marker icon (DivIcon, Icon Url or Circle Marker).
-    if ($feature['type'] === 'point' && isset($this->options['icon'])) {
+    if (in_array($feature['type'], [
+      'point',
+      'multipoint',
+      'geometrycollection',
+    ]) && isset($this->options['icon'])) {
       // Set Feature Icon properties.
       $feature['icon'] = $this->options['icon'];
 

@@ -306,15 +306,12 @@ final class Hooks {
    *   The batch job definition.
    */
   public static function applyRecipes(array &$install_state): array {
-    // Always apply required recipes first.
-    $recipes_to_apply = $install_state['profile_info']['recipes']['required'] ?? [];
-
-    $additional_recipes = $install_state['parameters']['recipes'] ?? NULL;
-    // This might be an empty string if no recipes were chosen by RecipesForm.
-    // @see \Drupal\RecipeKit\Installer\Form\RecipesForm::submitForm()
-    if (is_array($additional_recipes)) {
-      array_push($recipes_to_apply, ...$additional_recipes);
-    }
+    // Apply required recipes first, followed by any additional recipes the user
+    // has chosen (i.e., via our forms).
+    $recipes_to_apply = array_merge(
+      $install_state['profile_info']['recipes']['required'] ?? [],
+      $install_state['parameters']['recipes'] ?? [],
+    );
 
     // If the installer ran before but failed mid-stream, don't reapply any
     // recipes that were successfully applied.
