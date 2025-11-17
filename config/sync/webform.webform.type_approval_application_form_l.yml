@@ -1,0 +1,676 @@
+uuid: 5dd977b9-e80b-4060-9c61-f28f80690533
+langcode: en
+status: open
+dependencies:
+  module:
+    - webform_entity_print
+third_party_settings:
+  webform_entity_print:
+    template:
+      header: '<p>Certificate</p>'
+      footer: '<p>Thank you</p>'
+      css: ''
+    export_types:
+      pdf:
+        enabled: true
+        link_text: ''
+        link_attributes: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: type_approval_application_form_l
+title: 'Local Applications'
+description: '<p>For local customers</p>'
+categories: {  }
+elements: |-
+  applicant_type_selection:
+    '#type': webform_section
+    '#title': 'Initial Review'
+    flexbox_11:
+      '#type': webform_flexbox
+      individual_or_organization:
+        '#type': select
+        '#title': 'Individual or Business'
+        '#options':
+          Individual: Individual
+          Organization: Organization
+        '#required': true
+  applicant_information:
+    '#type': webform_section
+    '#title': 'Applicant Information'
+    flexbox:
+      '#type': webform_flexbox
+      '#justify_content': justify-flex-start
+      full_name:
+        '#type': textfield
+        '#title': 'Full Name'
+        '#required': true
+      email_address:
+        '#type': email
+        '#title': 'Email Address'
+        '#required': true
+      mobile:
+        '#type': tel
+        '#title': Mobile
+        '#states':
+          disabled:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
+        '#required': true
+    physical_address:
+      '#type': textarea
+      '#title': Address
+      '#required': true
+    flexbox_10:
+      '#type': webform_flexbox
+      '#states':
+        visible:
+          ':input[name="individual_or_organization"]':
+            value: Organization
+      organization:
+        '#type': textfield
+        '#title': Business
+      website:
+        '#type': url
+        '#title': Website
+  device_and_import_information:
+    '#type': webform_section
+    '#title': 'Device and Import Information'
+    flexbox_13:
+      '#type': webform_flexbox
+      have_you_review_the_list_of_approved_devices:
+        '#type': select
+        '#title': 'Has Your Device Been Approved?'
+        '#description': '<p>Please refer to the <a href="/list-approved-devices">List of Approved Devices</a> to see if you device has been approved or not.</p>'
+        '#options':
+          'Yes': 'Yes'
+          'No': 'No'
+        '#required': true
+      type_of_device:
+        '#type': select
+        '#title': 'Type of Device'
+        '#options':
+          'Broadband Terminal Equipment': 'Broadband Terminal Equipment'
+          'Fixed Telecommunications Equipment': 'Fixed Telecommunications Equipment'
+          'Fixed Wireless Terminal Equipment': 'Fixed Wireless Terminal Equipment'
+          'IoT and Smart Devices': 'IoT and Smart Devices'
+          'Automotive Communication and Infotainment Equipment': 'Automotive Communication and Infotainment Equipment'
+          'Radio and Wireless Communication Equipment': 'Radio and Wireless Communication Equipment'
+        '#required': true
+    flexbox_03:
+      '#type': webform_flexbox
+      manufacturer:
+        '#type': textfield
+        '#title': Manufacturer
+        '#description': '<p>E.g. Apple, Samsung, LG etc</p>'
+        '#required': true
+      model:
+        '#type': textfield
+        '#title': Model
+        '#description': '<p>E.g. iPhone 13 Pro Max, Samsung Galaxy S9 etc</p>'
+        '#required': true
+    flexbox_05:
+      '#type': webform_flexbox
+      frequency_range:
+        '#type': textfield
+        '#title': 'Frequency Range'
+        '#states':
+          visible:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
+      itu_emission_code:
+        '#type': textfield
+        '#title': 'ITU Emission Code'
+        '#states':
+          visible:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
+    flexbox_06:
+      '#type': webform_flexbox
+      modulation:
+        '#type': textfield
+        '#title': Modulation
+        '#states':
+          visible:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
+      power_output:
+        '#type': textfield
+        '#title': 'Power Output'
+        '#states':
+          visible:
+            - ':input[name="type_of_device"]':
+                value: Satellite
+            - xor
+            - ':input[name="type_of_device"]':
+                value: 'Radio Transceiver'
+    intended_use_in_kiribati_select:
+      '#type': select
+      '#title': 'Intended Use in Kiribati'
+      '#options':
+        'For Sale': 'For Sale'
+        'For Personal Use': 'For Personal Use'
+      '#states':
+        visible:
+          ':input[name="type_of_applicant"]':
+            value: 'Local Customer'
+  quantity_entry_point:
+    '#type': webform_section
+    '#title': 'Quantity & Entry Point'
+    flexbox_12:
+      '#type': webform_flexbox
+      quantity_of_device:
+        '#type': number
+        '#title': 'Quantity of Device'
+        '#required': true
+      custom_entry_point:
+        '#type': select
+        '#title': 'Location of Parcel'
+        '#options':
+          'Customs Betio': 'Customs Betio'
+          'Customs Bonriki': 'Customs Bonriki'
+          'DHL Tobaraoi': 'DHL Tobaraoi'
+          'Postal Office Bairiki': 'Postal Office Bairiki'
+        '#required': true
+  supporting_documents:
+    '#type': webform_section
+    '#title': 'Supporting Documents'
+    flexbox_07:
+      '#type': webform_flexbox
+      test_report_s_acma_ce_fcc_itu:
+        '#type': webform_document_file
+        '#title': 'Test Report(s) (ACMA, CE, FCC, ITU) '
+        '#max_filesize': '25'
+      declaration_of_conformity_certificate:
+        '#type': webform_document_file
+        '#title': 'Declaration of Conformity / Certificate'
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
+        '#max_filesize': '25'
+    flexbox_08:
+      '#type': webform_flexbox
+      copy_of_labeling_marking:
+        '#type': webform_document_file
+        '#title': 'Copy of Labeling / Marking'
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
+        '#max_filesize': '25'
+      operating_manual_catalogue:
+        '#type': webform_document_file
+        '#title': 'Operating Manual / Catalogue'
+        '#states':
+          visible:
+            ':input[name="type_of_applicant"]':
+              value: 'International Customer'
+        '#max_filesize': '25'
+    description_of_repair_services_in_kiribati:
+      '#type': textarea
+      '#title': 'Description of Repair Services in Kiribati'
+  admin_action:
+    '#type': webform_section
+    '#title': 'Admin Action'
+    '#access_create_roles': {  }
+    '#access_update_roles':
+      - authenticated
+    '#access_view_roles':
+      - authenticated
+    status:
+      '#type': select
+      '#title': Status
+      '#options':
+        'Need Review': 'Need Review'
+        Rejected: Rejected
+        Approved: Approved
+        Granted: Granted
+      '#default_value': 'Need Review'
+      '#access_create_roles': {  }
+      '#access_update_roles':
+        - administrator
+        - application_manager
+      '#access_view_roles':
+        - administrator
+        - application_manager
+    reason_for_rejection:
+      '#type': textarea
+      '#title': 'Reason for rejection'
+      '#states':
+        visible:
+          ':input[name="status"]':
+            value: Rejected
+      '#access_create_roles': {  }
+      '#access_update_roles':
+        - administrator
+        - application_manager
+      '#access_view_roles':
+        - administrator
+        - application_manager
+    fee:
+      '#type': select
+      '#title': Fee
+      '#options':
+        International: $610
+        LocalNotRegistered: $60
+        LocalRegisteredNotOwner: $20
+        LocalRegisteredOwner: $0
+      '#states':
+        visible:
+          ':input[name="status"]':
+            value: Approved
+      '#access_create_roles': {  }
+      '#access_update_roles':
+        - administrator
+        - application_manager
+      '#access_view_roles':
+        - administrator
+        - application_manager
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: true
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: true
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: '50'
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+  form_file_limit_message: ''
+access:
+  create:
+    roles:
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles:
+      - administrator
+      - application_manager
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles:
+      - administrator
+      - applicant
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles:
+      - administrator
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles:
+      - administrator
+      - applicant
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles:
+      - administrator
+      - applicant
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  email:
+    id: email
+    handler_id: email
+    label: 'Email notification to acknowledge submission'
+    notes: 'Email notification to the user who submitted the form to acknowledge the receipt of his/her application.'
+    status: true
+    conditions: {  }
+    weight: -49
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:email_address:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: typeapproval@cck.ki
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Application Received'
+      body: '<p>Dear [webform_submission:user]</p><p>We acknowledge the receipt of your type approval application on this date, [webform_submission:created]</p><p>You will receive further communication regarding the status of your application in a separate email.</p><p>Thank you</p>'
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+      langcode: ''
+  email_1:
+    id: email
+    handler_id: email_1
+    label: 'Email notification for Application Manager'
+    notes: 'Email notification to CCK Application Manager to inform him/her about the submission.'
+    status: true
+    conditions: {  }
+    weight: -50
+    settings:
+      states:
+        - completed
+      to_mail: typeapproval@cck.ki
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Attention: Type Approval Application received through the web'
+      body: '<p>Dear Application Manager,</p><p>A submission for Type Approval is received through the application portal.</p><p>Your urgent action is needed. Please login to the portal to review the submission.</p><p>Ko rabwa.&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>'
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+      langcode: ''
+  email_2:
+    id: email
+    handler_id: email_2
+    label: 'Email notification for approval of application'
+    notes: 'Email notification for approved application'
+    status: true
+    conditions:
+      enabled:
+        ':input[name="status"]':
+          value: Approved
+    weight: -48
+    settings:
+      states:
+        - completed
+        - updated
+      to_mail: '[webform_submission:values:email_address:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: typeapproval@cck.ki
+      from_options: {  }
+      from_name: _default
+      reply_to: typeapproval@cck.ki
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Type Approval Application Approved'
+      body: '<p>Dear [webform_submission:user],</p><p>Your application has been reviewed and now pending approval subject to the payment of the fee. Please pay the fee via bank transfer or Internet Banking App.</p><p>+------------------------------------------------------+</p><p>Account Details:</p><p>Bank: ANZ Bank (Kiribati) Limited</p><p>Address: Main Street, Bairiki, Tarawa, Kiribati</p><p>Swift: BKIRKIKI</p><p>Account Name: Communications Commission of Kiribati</p><p>Account Number: 1111111</p><p>Amount Due: [webform_submission:values:fee]</p><p>+------------------------------------------------------+</p><p>After you make the payment, please respond to this email attaching the proof such as the screenshot of the transaction or bank telegraphic transfer reference number.</p><p>Once we confirm the payment, you will receive the release form for your items.</p><p>Thank you.</p>'
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+      langcode: ''
+  email_3:
+    id: email
+    handler_id: email_3
+    label: 'Email notification for rejected application'
+    notes: 'Notification for rejected applications.'
+    status: true
+    conditions:
+      enabled:
+        ':input[name="status"]':
+          value: Rejected
+    weight: -47
+    settings:
+      states:
+        - completed
+        - updated
+      to_mail: '[webform_submission:values:email_address:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: typeapproval@cck.ki
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Type Approval Application Rejected'
+      body: '<p>Dear [webform_submission:user],</p><p>We have reviewed your application and regret to inform you that we reject it due to the reason explained below.</p><p>+---------------------------------------------------------------+</p><p>Reason:</p><p>[webform_submission:values:reason_for_rejection]</p><p>+---------------------------------------------------------------+</p><p>To rectify the issue, please login to the application portal and edit your submission addressing the reasons above. Once you done, we will review your application again and communicate further with you.</p><p>Thank you.</p>'
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+      langcode: ''
+  email_4:
+    id: email
+    handler_id: email_4
+    label: 'Email to send release form and receipt'
+    notes: 'This email will be sent when the status is updated from approved to granted upon the confirmation of payment.'
+    status: true
+    conditions:
+      enabled:
+        ':input[name="status"]':
+          value: Granted
+    weight: 0
+    settings:
+      states:
+        - updated
+      to_mail: '[webform_submission:values:email_address:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: typeapprove@cck.ki
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Type Approval Release Form'
+      body: '<p>Dear [webform_submission:user],</p><p>Thank you for your application. We confirm the receipt of your payment. Please find attached your release form and receipt.</p><p>Ko rabwa</p><p>&nbsp;</p>'
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+      langcode: ''
+variants: {  }
