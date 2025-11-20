@@ -418,6 +418,12 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     case 'Customs Bonriki':
       $custom = 'bonriki';
       break;
+    case 'DHL Tobaraoi':
+      $custom = 'tobaraoi';
+      break;
+    case 'Postal Office Bairiki':
+      $custom = 'bairiki';
+      break;
     default:
       $custom = $custom_entry_point;
   }

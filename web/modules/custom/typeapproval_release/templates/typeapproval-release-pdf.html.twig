@@ -76,9 +76,8 @@
     </div>
     Betio <span class="check {{ custom == 'betio' ? 'checked' : '' }}"></span>
     Bonriki <span class="check {{ custom == 'bonriki' ? 'checked' : '' }}"></span>
-    Others <span class="check {{ (custom != 'betio' and custom != 'bonriki') ? 'checked' : '' }}"></span>
-    <span class="label" style="margin-left:4mm;">If others please specify:</span>
-    <span class="line wide">{% if custom != 'betio' and custom != 'bonriki' %}{{ custom }}{% endif %}</span>
+    DHL Tobaraoi <span class="check {{ custom == 'tobaraoi' ? 'checked' : '' }}"></span>
+    Postal Office Bairiki <span class="check {{ custom == 'bairiki' ? 'checked' : '' }}"></span>
   </div>
 
   <div class="row">Date: {{ "now"|date('j F Y') }}</div>
