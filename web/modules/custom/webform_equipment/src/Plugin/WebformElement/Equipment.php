@@ -88,24 +88,7 @@ class Equipment extends WebformCompositeBase {
           ],
         ],
         // Flexbox for origin.
-        'flexbox_04' => [
-          '#type' => 'webform_flexbox',
-          '#attributes' => [
-            'class' => ['webform-flex', 'webform-flex--container'],
-          ],
-          'origin' => [
-            '#type' => 'textfield',
-            '#title' => $this->t('Origin'),
-            '#states' => [
-              'visible' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-              'required' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-            ],
-          ],
-        ],
+
         // Flexbox for frequency range and ITU emission code.
         'flexbox_05' => [
           '#type' => 'webform_flexbox',
@@ -115,34 +98,12 @@ class Equipment extends WebformCompositeBase {
           'frequency_range' => [
             '#type' => 'textfield',
             '#title' => $this->t('Frequency Range'),
-            '#states' => [
-              'visible' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-              'required' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-            ],
+            '#required' => TRUE,
           ],
           'itu_emission_code' => [
             '#type' => 'textfield',
             '#title' => $this->t('ITU Emission Code'),
-            '#states' => [
-              'visible' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-              'required' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-            ],
+            '#required' => TRUE,
           ],
         ],
         // Flexbox for modulation and power output.
@@ -154,88 +115,12 @@ class Equipment extends WebformCompositeBase {
           'modulation' => [
             '#type' => 'textfield',
             '#title' => $this->t('Modulation'),
-            '#states' => [
-              'visible' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-              'required' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-            ],
+            '#required' => TRUE,
           ],
           'power_output' => [
             '#type' => 'textfield',
             '#title' => $this->t('Power Output'),
-            '#states' => [
-              'visible' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-              'required' => [
-                [':input[name="type_of_device"]' => ['value' => 'Satellite']],
-                'xor',
-                [':input[name="type_of_device"]' => ['value' => 'Radio Transceiver']],
-              ],
-            ],
-          ],
-        ],
-        'intended_use_in_kiribati_select' => [
-          '#type' => 'select',
-          '#title' => $this->t('Intended Use in Kiribati'),
-          '#options' => [
-            'For Sale' => $this->t('For Sale'),
-            'For Personal Use' => $this->t('For Personal Use'),
-          ],
-          '#states' => [
-            'visible' => [
-              ':input[name="type_of_applicant"]' => ['value' => 'Local Customer'],
-            ],
-          ],
-        ],
-      ],
-
-      // Section: Quantity & Entry Point.
-      'quantity_entry_point' => [
-        '#type' => 'webform_section',
-        '#title' => $this->t('Quantity & Entry Point'),
-        '#states' => [
-          'visible' => [
-            ':input[name="type_of_applicant"]' => ['value' => 'Local Customer'],
-          ],
-        ],
-        'flexbox_12' => [
-          '#type' => 'webform_flexbox',
-          '#attributes' => [
-            'class' => ['webform-flex', 'webform-flex--container'],
-          ],
-          'quantity_of_device' => [
-            '#type' => 'number',
-            '#title' => $this->t('Quantity of Device'),
-            '#states' => [
-              'required' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'Local Customer'],
-              ],
-            ],
-          ],
-          'custom_entry_point' => [
-            '#type' => 'select',
-            '#title' => $this->t('Location of Parcel'),
-            '#options' => [
-              'Customs Betio' => $this->t('Customs Betio'),
-              'Customs Bonriki' => $this->t('Customs Bonriki'),
-              'DHL Tobaraoi' => $this->t('DHL Tobaraoi'),
-              'Postal Office Bairiki' => $this->t('Postal Office Bairiki'),
-            ],
-            '#states' => [
-              'required' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'Local Customer'],
-              ],
-            ],
+            '#required' => TRUE,
           ],
         ],
       ],
@@ -257,16 +142,9 @@ class Equipment extends WebformCompositeBase {
           ],
           'declaration_of_conformity_certificate' => [
             '#type' => 'webform_document_file',
-            '#title' => $this->t('Declaration of Conformity / Certificate'),
-            '#max_filesize' => '25',
-            '#states' => [
-              'visible' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-              'required' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-            ],
+            '#title' => 'Declaration of Conformity / Certificate',
+            '#required' => true,
+            '#max_filesize' => '50',
           ],
         ],
         'flexbox_08' => [
@@ -276,42 +154,73 @@ class Equipment extends WebformCompositeBase {
           ],
           'copy_of_labeling_marking' => [
             '#type' => 'webform_document_file',
-            '#title' => $this->t('Copy of Labeling / Marking'),
+            '#title' => t('Copy of Labeling / Marking'),
             '#max_filesize' => '25',
-            '#states' => [
-              'visible' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-              'required' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-            ],
+            '#required' => TRUE,
           ],
           'operating_manual_catalogue' => [
             '#type' => 'webform_document_file',
-            '#title' => $this->t('Operating Manual / Catalogue'),
+            '#title' => t('Operating Manual / Catalogue'),
             '#max_filesize' => '25',
-            '#states' => [
-              'visible' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-              'required' => [
-                ':input[name="type_of_applicant"]' => ['value' => 'International Customer'],
-              ],
-            ],
-          ],
-        ],
-        'description_of_repair_services_in_kiribati' => [
-          '#type' => 'textarea',
-          '#title' => $this->t('Description of Repair Services in Kiribati'),
-          '#states' => [
-            'visible' => [
-              ':input[name="type_of_applicant"]' => ['value' => 'Local Customer'],
-            ],
+            '#required' => TRUE,
           ],
         ],
       ],
     ];
+    if ($element['#webform'] == 'type_approval_application_form_i') {
+      $element['#webform_composite_elements']['device_and_import_information']['flexbox_04'] = [
+        '#type' => 'webform_flexbox',
+        '#attributes' => [
+          'class' => ['webform-flex', 'webform-flex--container'],
+        ],
+        'origin' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Device or Equipment Origin'),
+          '#required' => TRUE,
+        ],
+      ];
+    }
+
+    if ($element['#webform'] == 'type_approval_application_form_l') {
+      $element['#webform_composite_elements']['device_and_import_information']['flexbox_06']['intended_use_in_kiribati_select'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Intended Use in Kiribati'),
+        '#options' => [
+          'For Sale' => $this->t('For Sale'),
+          'For Personal Use' => $this->t('For Personal Use'),
+        ],
+      ];
+      $element['#webform_composite_elements']['quantity_entry_point'] = [
+        '#type' => 'webform_section',
+        '#title' => $this->t('Quantity & Entry Point'),
+        'flexbox_12' => [
+          '#type' => 'webform_flexbox',
+          '#attributes' => [
+            'class' => ['webform-flex', 'webform-flex--container'],
+          ],
+          'quantity_of_device' => [
+            '#type' => 'number',
+            '#title' => $this->t('Quantity of Device'),
+            '#required' => TRUE,
+          ],
+          'custom_entry_point' => [
+            '#type' => 'select',
+            '#title' => $this->t('Location of Parcel'),
+            '#required' => TRUE,
+            '#options' => [
+              'Customs Betio' => $this->t('Customs Betio'),
+              'Customs Bonriki' => $this->t('Customs Bonriki'),
+              'DHL Tobaraoi' => $this->t('DHL Tobaraoi'),
+              'Postal Office Bairiki' => $this->t('Postal Office Bairiki'),
+            ],
+          ],
+        ],
+      ];
+      $element['#webform_composite_elements']['supporting_documents']['description_of_repair_services_in_kiribati'] = [
+        '#type' => 'textarea',
+        '#title' => $this->t('Description of Repair Services in Kiribati'),
+      ];
+    }
   }
 
   /**

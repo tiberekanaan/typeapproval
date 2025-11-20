@@ -14,8 +14,13 @@ use Drupal\user\Entity\Role;
  * Enforce $0 fee and disable Fee field for repeat submissions.
  */
 function typeapproval_release_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $allow_webforms = [
+    'type_approval_application_form_i',
+    'type_approval_application_form',
+    'type_approval_application_form_l',
+  ];
   // Ensure this is our target webform.
-  if ($form['#webform_id'] !== 'type_approval_application_form') {
+  if (!in_array($form['#webform_id'], $allow_webforms, TRUE)) {
     return;
   }
   // Obtain current submission data if available.
@@ -87,14 +92,10 @@ function typeapproval_release_webform_submission_form_alter(array &$form, FormSt
   };
 
   $email = $get_text('field_email_address');
-  $contact_person = $get_text('field_contact_person_name');
+  $full_name = $get_text('field_full_name');
   $organization = $get_text('field_organization');
   $physical_address = $get_text('field_physical_address');
-  $postal_address = $get_text('field_postal_address');
-  $country = $get_text('field_country');
   $phone = $get_text('field_telephone');
-  // New profile selectors (prefer these over heuristics).
-  $profile_local_international = $get_text('field_local_or_international');
   $profile_individual_org = $get_text('field_individual_or_organization');
 
   // Website (link) needs to read uri.
@@ -117,21 +118,6 @@ function typeapproval_release_webform_submission_form_alter(array &$form, FormSt
     }
   }
 
-  // Normalize helper for applicant type strictly based on profile field.
-  $normalize_type_of_applicant = function ($value) {
-    if (is_string($value)) {
-      // Accept common variants.
-      if ($value == 'local_customer') {
-        return 'Local Customer';
-      }
-      if ($value == 'international_customer') {
-        return 'International Customer';
-      }
-    }
-    // No fallback: depend only on field_local_or_international.
-    return NULL;
-  };
-
   // Normalize helper for individual or organization strictly based on profile field.
   $normalize_individual_org = function ($value) {
     if (is_string($value)) {
@@ -149,14 +135,10 @@ function typeapproval_release_webform_submission_form_alter(array &$form, FormSt
 
   // Determine initial applicant type selections based first on profile fields.
   $individual_or_org = $normalize_individual_org($profile_individual_org);
-  $type_of_applicant = $normalize_type_of_applicant($profile_local_international);
 
   // Prefill the initial review selectors if present.
   if (isset($form['elements']['applicant_type_selection']['flexbox_11'])) {
     $ats =& $form['elements']['applicant_type_selection']['flexbox_11'];
-    if (isset($ats['type_of_applicant'])) {
-      $set_default($ats['type_of_applicant'], 'type_of_applicant', $type_of_applicant);
-    }
     if (isset($ats['individual_or_organization'])) {
       $set_default($ats['individual_or_organization'], 'individual_or_organization', $individual_or_org);
     }
@@ -169,47 +151,29 @@ function typeapproval_release_webform_submission_form_alter(array &$form, FormSt
 
   // Map and set defaults on form elements based on the rules provided.
   $ai =& $form['elements']['applicant_information'];
+  $set_default($ai['flexbox']['mobile'], 'mobile', $phone);
 
-  // International Customer: Prefill Country and Telephone (mapped to mobile field).
-  if ($type_of_applicant === 'International Customer') {
-    if (isset($ai['flexbox_01'])) {
-      $set_default($ai['flexbox_01']['country'], 'country', $country);
-    }
-    if (isset($ai['flexbox']['mobile'])) {
-      $set_default($ai['flexbox']['mobile'], 'mobile', $phone);
-    }
-  }
-
-  // Local + Individual: Prefill Mobile.
-  if ($type_of_applicant === 'Local Customer' && $individual_or_org === 'Individual') {
+  // Always prefill email and addresses for all cases.
+  $set_default($ai['physical_address'], 'physical_address', $physical_address);
+  if ($ai['#webform'] == 'type_approval_application_form_i') {
     if (isset($ai['flexbox'])) {
-      $set_default($ai['flexbox']['mobile'], 'mobile', $phone);
+      $set_default($ai['flexbox']['organization'], 'organization', $organization);
+      $set_default($ai['flexbox']['website'], 'website', $website);
+    }
+    if (isset($ai['flexbox_10'])) {
+      $set_default($ai['flexbox_10']['email_address'], 'email_address', $email);
+      $set_default($ai['flexbox_10']['full_name'], 'full_name', $full_name);
     }
   }
-
-  // Individual (any type): Prefill Full Name.
-  if ($individual_or_org === 'Individual') {
+  if ($ai['#webform'] == 'type_approval_application_form_l') {
     if (isset($ai['flexbox'])) {
-      $set_default($ai['flexbox']['full_name'], 'full_name', $contact_person);
+      $set_default($ai['flexbox']['email_address'], 'email_address', $email);
+      $set_default($ai['flexbox']['full_name'], 'full_name', $full_name);
     }
-  }
-
-  // Organization: Prefill Organization, Website, Contact Person Name.
-  if ($individual_or_org === 'Organization') {
     if (isset($ai['flexbox_10'])) {
       $set_default($ai['flexbox_10']['organization'], 'organization', $organization);
       $set_default($ai['flexbox_10']['website'], 'website', $website);
     }
-    if (isset($ai['flexbox_02'])) {
-      $set_default($ai['flexbox_02']['contact_person_name'], 'contact_person_name', $contact_person);
-    }
-  }
-
-  // Always prefill email and addresses for all cases.
-  $set_default($ai['physical_address'], 'physical_address', $physical_address);
-  $set_default($ai['postal_address'], 'postal_address', $postal_address);
-  if (isset($ai['flexbox_02'])) {
-    $set_default($ai['flexbox_02']['email_address'], 'email_address', $email);
   }
 }
 
@@ -262,8 +226,13 @@ function typeapproval_release_form_profile_form_alter(array &$form, FormStateInt
  * Ensure fee is always $0 for repeat submissions at save time.
  */
 function typeapproval_release_webform_submission_presave(WebformSubmissionInterface $webform_submission) {
+  $allow_webforms = [
+    'type_approval_application_form_i',
+    'type_approval_application_form',
+    'type_approval_application_form_l',
+  ];
   $webform = $webform_submission->getWebform();
-  if (!$webform || $webform->id() !== 'type_approval_application_form') {
+  if (!$webform || !in_array($webform->id(), $allow_webforms, TRUE)) {
     return;
   }
   $data = $webform_submission->getData() ?: [];
@@ -297,10 +266,15 @@ function typeapproval_release_theme($existing, $type, $theme, $path) {
  * Implements hook_webform_submission_view_alter().
  */
 function typeapproval_release_webform_submission_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  $allow_webforms = [
+    'type_approval_application_form_i',
+    'type_approval_application_form',
+    'type_approval_application_form_l',
+  ];
   // Only add button for the target webform.
   if (method_exists($entity, 'getWebform')) {
     $webform = $entity->getWebform();
-    if (!$webform || $webform->id() !== 'type_approval_application_form') {
+    if (!$webform || !in_array($webform->id(), $allow_webforms, TRUE)) {
       return;
     }
   }
@@ -373,7 +347,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
 
   // Only target the expected webform.
   $webform = $entity->getWebform();
-  if (!$webform || $webform->id() !== 'type_approval_application_form') {
+  if (!$webform || ($webform->id() !== 'type_approval_application_form_l' && $webform->id() !== 'type_approval_application_form_i')) {
     return;
   }
 
@@ -399,32 +373,28 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     return;
   }
 
+  $company_address = $new_data['company_address'] ?? [];
+  $physical_address = '';
+  if ($new_data['physical_address']) {
+    $physical_address = $new_data['physical_address'];
+  }
+  elseif ($company_address) {
+    $physical_address = formatAddress($company_address['address'], $company_address['address_2'], $company_address['city'], $company_address['state_province'], $company_address['country']);
+  }
+
   // Build the same render array used by the controller and generate the PDF.
   $applicant = [
-    'type_of_applicant' => $new_data['type_of_applicant'] ?? '',
-    'individual_or_organization' => $new_data['individual_or_organization'] ?? '',
     'full_name' => $new_data['full_name'] ?? '',
     'organization' => $new_data['organization'] ?? '',
     'email_address' => $new_data['email_address'] ?? '',
-    'contact_person_name' => $new_data['contact_person_name'] ?? '',
-    'country' => $new_data['country'] ?? '',
-    'telephone' => $new_data['telephone'] ?? '',
     'mobile' => $new_data['mobile'] ?? '',
-    'physical_address' => $new_data['physical_address'] ?? '',
-    'postal_address' => $new_data['postal_address'] ?? '',
+    'physical_address' => $physical_address,
   ];
 
   $device = [
     'type_of_device' => $new_data['type_of_device'] ?? '',
     'manufacturer' => $new_data['manufacturer'] ?? '',
     'model' => $new_data['model'] ?? '',
-    'product_name' => $new_data['product_name'] ?? '',
-    'origin' => $new_data['origin'] ?? '',
-    'frequency_range' => $new_data['frequency_range'] ?? '',
-    'itu_emission_code' => $new_data['itu_emission_code'] ?? '',
-    'modulation' => $new_data['modulation'] ?? '',
-    'power_output' => $new_data['power_output'] ?? '',
-    'intended_use' => $new_data['intended_use_in_kiribati_select'] ?? '',
     'quantity_of_device' => $new_data['quantity_of_device'] ?? '',
   ];
 
@@ -585,6 +555,33 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     \Drupal::logger('typeapproval_release')->error('Failed to send Release PDF email for submission @sid.', ['@sid' => $sid]);
   }
 }
+
+function formatAddress($address, $address2, $city, $stateProvince, $country) {
+  $parts = [];
+
+  if (!empty($address)) {
+    $parts[] = $address;
+  }
+
+  if (!empty($address2)) {
+    $parts[] = $address2;
+  }
+
+  if (!empty($city)) {
+    $parts[] = $city;
+  }
+
+  if (!empty($stateProvince)) {
+    $parts[] = $stateProvince;
+  }
+
+  if (!empty($country)) {
+    $parts[] = $country;
+  }
+
+  return implode(', ', $parts);
+}
+
 
 /**
  * Helper: Convert a local file to a data URI for embedding in HTML.

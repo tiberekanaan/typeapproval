@@ -85,8 +85,7 @@
 
   <div class="row" style="margin-top:8mm;">Owner's name: {{ applicant.full_name ?: applicant.organization }}</div>
   <div class="row">Address: {{ applicant.physical_address }}</div>
-  {% set phone = applicant.telephone ? applicant.telephone : applicant.mobile %}
-  <div class="row">Contact Phone/Email: {{ phone }}{% if phone and applicant.email_address %} / {% endif %}{{ applicant.email_address }}</div>
+  <div class="row">Contact Phone/Email: {{ applicant.mobile }}{% if applicant.mobile and applicant.email_address %} / {% endif %}{{ applicant.email_address }}</div>
 
   <div class="row" style="margin-top:8mm;">Brief Description of Equipments:</div>
   <table>
@@ -99,7 +98,7 @@
     </thead>
     <tbody>
     {% set rows_to_show = 6 %}
-    {% set first_desc = device.product_name ?: device.model ?: device.type_of_device %}
+    {% set first_desc = device.model ?: device.type_of_device %}
     {% set first_qty = device.quantity_of_device %}
     {% for i in 1..rows_to_show %}
       <tr>
