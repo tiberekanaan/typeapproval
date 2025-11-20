@@ -11,7 +11,7 @@ id: profile.applicant.field_telephone
 field_name: field_telephone
 entity_type: profile
 bundle: applicant
-label: Telephone
+label: Mobile
 description: ''
 required: false
 translatable: false

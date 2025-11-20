@@ -68,93 +68,11 @@ elements: |-
     '#title_display': ''
     '#required': true
     '#wrapper_type': container
-  device_and_import_information:
-    '#type': webform_section
-    '#title': 'Device and Import Information'
-    flexbox_13:
-      '#type': webform_flexbox
-      have_you_review_the_list_of_approved_devices:
-        '#type': select
-        '#title': 'Has Your Device Been Approved?'
-        '#description': '<p>Please refer to the <a href="/list-approved-devices">List of Approved Devices</a> to see if you device has been approved or not.</p>'
-        '#options':
-          'Yes': 'Yes'
-          'No': 'No'
-        '#required': true
-      type_of_device:
-        '#type': select
-        '#title': 'Type of Device'
-        '#options':
-          'Broadband Terminal Equipment': 'Broadband Terminal Equipment'
-          'Fixed Telecommunications Equipment': 'Fixed Telecommunications Equipment'
-          'Fixed Wireless Terminal Equipment': 'Fixed Wireless Terminal Equipment'
-          'IoT and Smart Devices': 'IoT and Smart Devices'
-          'Automotive Communication and Infotainment Equipment': 'Automotive Communication and Infotainment Equipment'
-          'Radio and Wireless Communication Equipment': 'Radio and Wireless Communication Equipment'
-        '#required': true
-    flexbox_03:
-      '#type': webform_flexbox
-      manufacturer:
-        '#type': textfield
-        '#title': Manufacturer
-        '#description': '<p>E.g. Apple, Samsung, LG etc</p>'
-        '#required': true
-      model:
-        '#type': textfield
-        '#title': Model
-        '#description': '<p>E.g. iPhone 13 Pro Max, Samsung Galaxy S9 etc</p>'
-        '#required': true
-    flexbox_04:
-      '#type': webform_flexbox
-      device_or_equipment_origin:
-        '#type': select
-        '#title': 'Device or Equipment Origin'
-        '#description': '<p>The country from which the device or equipment is manufactured</p>'
-        '#options': country_names
-        '#required': true
-    flexbox_05:
-      '#type': webform_flexbox
-      frequency_range:
-        '#type': textfield
-        '#title': 'Frequency Range'
-      itu_emission_code:
-        '#type': textfield
-        '#title': 'ITU Emission Code'
-    flexbox_06:
-      '#type': webform_flexbox
-      modulation:
-        '#type': textfield
-        '#title': Modulation
-      power_output:
-        '#type': textfield
-        '#title': 'Power Output'
-  supporting_documents:
-    '#type': webform_section
-    '#title': 'Supporting Documents'
-    flexbox_07:
-      '#type': webform_flexbox
-      test_report_s_acma_ce_fcc_itu:
-        '#type': webform_document_file
-        '#title': 'Test Report(s) (ACMA, CE, FCC, ITU) '
-        '#required': true
-        '#max_filesize': '50'
-      declaration_of_conformity_certificate:
-        '#type': webform_document_file
-        '#title': 'Declaration of Conformity / Certificate'
-        '#required': true
-        '#max_filesize': '50'
-    flexbox_08:
-      '#type': webform_flexbox
-      copy_of_labeling_marking:
-        '#type': webform_document_file
-        '#title': 'Copy of Labeling / Marking'
-        '#required': true
-        '#max_filesize': '50'
-      operating_manual_catalogue:
-        '#type': webform_document_file
-        '#title': 'Operating Manual / Catalogue'
-        '#required': true
-        '#max_filesize': '50'
+  equipments:
+    '#type': equipment
+    '#title': Equipments
+    '#multiple': 10
+    '#required': true
   admin_action:
     '#type': webform_section
     '#title': 'Admin Action'
