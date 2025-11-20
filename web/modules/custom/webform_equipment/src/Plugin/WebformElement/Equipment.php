@@ -4,6 +4,7 @@ namespace Drupal\webform_equipment\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides an 'equipment' composite element.
@@ -144,7 +145,7 @@ class Equipment extends WebformCompositeBase {
             '#type' => 'webform_document_file',
             '#title' => 'Declaration of Conformity / Certificate',
             '#required' => true,
-            '#max_filesize' => '50',
+            '#max_filesize' => '25',
           ],
         ],
         'flexbox_08' => [
@@ -221,6 +222,27 @@ class Equipment extends WebformCompositeBase {
         '#title' => $this->t('Description of Repair Services in Kiribati'),
       ];
     }
+  }
+
+  /**
+   * Override to support nested composite sub-element lookup by key.
+   * WebformCompositeBase expects composite keys to be top-level, but our
+   * equipment composite nests inputs inside sections/flexboxes. This method
+   * returns the correct sub-element array when a nested key is requested.
+   */
+  public function getInitializedCompositeElement(array $element, $composite_key = NULL) {
+    $composite_elements = $element['#webform_composite_elements'] ?? [];
+    // Return full set when no specific key is requested.
+    if (!isset($composite_key)) {
+      return $composite_elements;
+    }
+    // Direct top-level hit.
+    if (isset($composite_elements[$composite_key])) {
+      return $composite_elements[$composite_key];
+    }
+    // Fallback: flatten nested structures and return the leaf by key.
+    $flattened = WebformElementHelper::getFlattened($composite_elements);
+    return $flattened[$composite_key] ?? NULL;
   }
 
   /**

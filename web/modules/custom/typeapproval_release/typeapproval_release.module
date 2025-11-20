@@ -251,7 +251,7 @@ function typeapproval_release_theme($existing, $type, $theme, $path) {
       'variables' => [
         'webform_submission' => NULL,
         'applicant' => [],
-        'device' => [],
+        'devices' => [],
         'status' => '',
         'generated_on' => '',
         'assets' => [],
@@ -390,13 +390,15 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     'mobile' => $new_data['mobile'] ?? '',
     'physical_address' => $physical_address,
   ];
-
-  $device = [
-    'type_of_device' => $new_data['type_of_device'] ?? '',
-    'manufacturer' => $new_data['manufacturer'] ?? '',
-    'model' => $new_data['model'] ?? '',
-    'quantity_of_device' => $new_data['quantity_of_device'] ?? '',
-  ];
+  $devices = [];
+  foreach ($new_data['equipments'] as $equipment) {
+    $devices[] = [
+      'type_of_device' => $equipment['type_of_device'] ?? '',
+      'manufacturer' => $equipment['manufacturer'] ?? '',
+      'model' => $equipment['model'] ?? '',
+      'quantity_of_device' => $equipment['quantity_of_device'] ?? '',
+    ];
+  }
 
   // Resolve module path for assets.
   $module_path = \Drupal::service('extension.list.module')->getPath('typeapproval_release');
@@ -408,7 +410,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     'sign_image' => _typeapproval_release_to_data_uri($sign_path, 'image/jpeg'),
   ];
 
-  $custom_entry_point = $new_data['custom_entry_point'];
+  $custom_entry_point = $new_data['equipments'][0]['custom_entry_point'];
   switch ($custom_entry_point) {
     case 'Customs Betio':
       $custom = 'betio';
@@ -424,7 +426,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
     '#theme' => 'typeapproval_release_pdf',
     '#webform_submission' => $entity,
     '#applicant' => $applicant,
-    '#device' => $device,
+    '#devices' => $devices,
     '#generated_on' => \Drupal::service('date.formatter')->format(\Drupal::time()->getRequestTime(), 'custom', 'Y-m-d H:i'),
     '#assets' => $assets,
     '#cache' => ['max-age' => 0],

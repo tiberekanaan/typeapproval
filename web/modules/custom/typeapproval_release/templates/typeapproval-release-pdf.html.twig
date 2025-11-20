@@ -97,22 +97,32 @@
     </tr>
     </thead>
     <tbody>
-    {% set rows_to_show = 6 %}
-    {% set first_desc = device.model ?: device.type_of_device %}
-    {% set first_qty = device.quantity_of_device %}
-    {% for i in 1..rows_to_show %}
+    {% for device in devices %}
+      {% set desc = device.model ?: device.type_of_device %}
       <tr>
-        <td class="no">{{ i }}</td>
+        <td class="no">{{ loop.index }}</td>
         <td>
-          {% if i == 1 %}
-            {% if first_desc %}
-              {{ first_desc }}{% if device.manufacturer %} ({{ device.manufacturer }}){% endif %}
-            {% else %}&nbsp;{% endif %}
-          {% else %}&nbsp;{% endif %}
+          {% if desc %}
+            {{ desc }}
+            {% if device.manufacturer %}
+              ({{ device.manufacturer }})
+            {% endif %}
+          {% endif %}
         </td>
-        <td class="qty">{% if i == 1 and first_qty %}{{ first_qty }}{% else %}&nbsp;{% endif %}</td>
+        <td class="qty">{{ device.quantity_of_device }}</td>
       </tr>
     {% endfor %}
+    {% if devices|length < 6 %}
+      {% set length = devices|length %}
+      {% set empty_rows = 6 - length %}
+      {% for row in empty_rows %}
+        <tr>
+          <td class="no"></td>
+          <td></td>
+          <td class="qty"></td>
+        </tr>
+      {% endfor %}
+    {% endif %}
     </tbody>
   </table>
 

@@ -136,7 +136,7 @@ class WebformEquipment extends WebformCompositeBase {
             '#type' => 'webform_document_file',
             '#title' => 'Declaration of Conformity / Certificate',
             '#required' => true,
-            '#max_filesize' => '50',
+            '#max_filesize' => '25',
           ],
         ],
         'flexbox_08' => [
