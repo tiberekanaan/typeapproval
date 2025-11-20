@@ -445,7 +445,7 @@ function typeapproval_release_entity_update(\Drupal\Core\Entity\EntityInterface 
   $dompdf->setPaper('A4', 'portrait');
   $dompdf->render();
   $pdf_data = $dompdf->output();
-  $filename = 'Release Form - ' . ($new_data['full_name'] ?: $new_data['contact_person_name']) . '.pdf';
+  $filename = 'Release Form - ' . $new_data['full_name'] . '.pdf';
 
   // Determine recipients separately for applicant and managers.
   $applicant_email = trim($new_data['email_address'] ?? '');

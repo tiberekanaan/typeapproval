@@ -141,30 +141,6 @@ class Equipment extends WebformCompositeBase {
             '#max_filesize' => '25',
             '#required' => TRUE,
           ],
-          'declaration_of_conformity_certificate' => [
-            '#type' => 'webform_document_file',
-            '#title' => 'Declaration of Conformity / Certificate',
-            '#required' => true,
-            '#max_filesize' => '25',
-          ],
-        ],
-        'flexbox_08' => [
-          '#type' => 'webform_flexbox',
-          '#attributes' => [
-            'class' => ['webform-flex', 'webform-flex--container'],
-          ],
-          'copy_of_labeling_marking' => [
-            '#type' => 'webform_document_file',
-            '#title' => t('Copy of Labeling / Marking'),
-            '#max_filesize' => '25',
-            '#required' => TRUE,
-          ],
-          'operating_manual_catalogue' => [
-            '#type' => 'webform_document_file',
-            '#title' => t('Operating Manual / Catalogue'),
-            '#max_filesize' => '25',
-            '#required' => TRUE,
-          ],
         ],
       ],
     ];
@@ -177,6 +153,30 @@ class Equipment extends WebformCompositeBase {
         'origin' => [
           '#type' => 'textfield',
           '#title' => $this->t('Device or Equipment Origin'),
+          '#required' => TRUE,
+        ],
+      ];
+      $element['#webform_composite_elements']['supporting_documents']['flexbox_07']['declaration_of_conformity_certificate'] = [
+        '#type' => 'webform_document_file',
+        '#title' => 'Declaration of Conformity / Certificate',
+        '#required' => true,
+        '#max_filesize' => '25',
+      ];
+      $element['#webform_composite_elements']['supporting_documents']['flexbox_08'] = [
+        '#type' => 'webform_flexbox',
+        '#attributes' => [
+          'class' => ['webform-flex', 'webform-flex--container'],
+        ],
+        'copy_of_labeling_marking' => [
+          '#type' => 'webform_document_file',
+          '#title' => t('Copy of Labeling / Marking'),
+          '#max_filesize' => '25',
+          '#required' => TRUE,
+        ],
+        'operating_manual_catalogue' => [
+          '#type' => 'webform_document_file',
+          '#title' => t('Operating Manual / Catalogue'),
+          '#max_filesize' => '25',
           '#required' => TRUE,
         ],
       ];

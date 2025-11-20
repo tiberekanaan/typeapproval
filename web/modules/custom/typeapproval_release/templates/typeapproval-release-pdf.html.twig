@@ -112,17 +112,6 @@
         <td class="qty">{{ device.quantity_of_device }}</td>
       </tr>
     {% endfor %}
-    {% if devices|length < 6 %}
-      {% set length = devices|length %}
-      {% set empty_rows = 6 - length %}
-      {% for row in empty_rows %}
-        <tr>
-          <td class="no"></td>
-          <td></td>
-          <td class="qty"></td>
-        </tr>
-      {% endfor %}
-    {% endif %}
     </tbody>
   </table>
 
