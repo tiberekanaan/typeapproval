@@ -99,11 +99,13 @@ class Equipment extends WebformCompositeBase {
           'frequency_range' => [
             '#type' => 'textfield',
             '#title' => $this->t('Frequency Range'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
           'itu_emission_code' => [
             '#type' => 'textfield',
             '#title' => $this->t('ITU Emission Code'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
         ],
@@ -116,11 +118,13 @@ class Equipment extends WebformCompositeBase {
           'modulation' => [
             '#type' => 'textfield',
             '#title' => $this->t('Modulation'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
           'power_output' => [
             '#type' => 'textfield',
             '#title' => $this->t('Power Output'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
         ],

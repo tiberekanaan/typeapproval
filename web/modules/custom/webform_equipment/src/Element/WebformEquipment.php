@@ -90,11 +90,13 @@ class WebformEquipment extends WebformCompositeBase {
           'frequency_range' => [
             '#type' => 'textfield',
             '#title' => t('Frequency Range'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
           'itu_emission_code' => [
             '#type' => 'textfield',
             '#title' => t('ITU Emission Code'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
         ],
@@ -107,11 +109,13 @@ class WebformEquipment extends WebformCompositeBase {
           'modulation' => [
             '#type' => 'textfield',
             '#title' => t('Modulation'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
           'power_output' => [
             '#type' => 'textfield',
             '#title' => t('Power Output'),
+            '#description' => 'Type N/A if not applicable',
             '#required' => TRUE,
           ],
         ],
