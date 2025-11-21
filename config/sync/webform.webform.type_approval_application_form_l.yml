@@ -80,7 +80,6 @@ elements: |-
     '#type': equipment
     '#title': Equipments
     '#multiple': 10
-    '#required': true
   admin_action:
     '#type': webform_section
     '#title': 'Admin Action'
@@ -120,24 +119,13 @@ elements: |-
         - administrator
         - application_manager
     fee:
-      '#type': select
+      '#type': number
       '#title': Fee
-      '#options':
-        International: $610
-        LocalNotRegistered: $60
-        LocalRegisteredNotOwner: $20
-        LocalRegisteredOwner: $0
+      '#field_prefix': $
       '#states':
         visible:
           ':input[name="status"]':
             value: Approved
-      '#access_create_roles': {  }
-      '#access_update_roles':
-        - administrator
-        - application_manager
-      '#access_view_roles':
-        - administrator
-        - application_manager
 css: ''
 javascript: ''
 settings:
