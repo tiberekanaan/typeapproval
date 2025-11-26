@@ -136,6 +136,22 @@ class RequestNewReleaseForm extends FormBase {
       '#required' => TRUE,
     ];
 
+    // Location selection (same options as original form).
+    $existing_location = $data['custom_entry_point'] ?? ($data['equipments'][0]['custom_entry_point'] ?? '');
+    $form['custom_entry_point'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Location of Parcel'),
+      '#required' => TRUE,
+      '#options' => [
+        'Customs Betio' => $this->t('Customs Betio'),
+        'Customs Bonriki' => $this->t('Customs Bonriki'),
+        'DHL Tobaraoi' => $this->t('DHL Tobaraoi'),
+        'Postal Office Bairiki' => $this->t('Postal Office Bairiki'),
+      ],
+      '#default_value' => $existing_location,
+      '#description' => $this->t('Select where the item will be collected or is currently located.'),
+    ];
+
     // Hidden to pass parent SID.
     $form['parent_sid'] = [
       '#type' => 'hidden',
@@ -170,6 +186,10 @@ class RequestNewReleaseForm extends FormBase {
     if ($qty < 1) {
       $form_state->setErrorByName('quantity_of_device', $this->t('Quantity must be at least 1.'));
     }
+    $location = (string) $form_state->getValue('custom_entry_point');
+    if ($location === '') {
+      $form_state->setErrorByName('custom_entry_point', $this->t('Please select the location of the item.'));
+    }
   }
 
   /**
@@ -182,8 +202,19 @@ class RequestNewReleaseForm extends FormBase {
     // Prepare new submission data by copying device fields and basic applicant.
     $new_data = $data;
 
-    // Overwrite quantity.
-    $new_data['quantity_of_device'] = (int) $form_state->getValue('quantity_of_device');
+    // Overwrite quantity (store at root for backward compatibility and inside equipments when present).
+    $new_qty = (int) $form_state->getValue('quantity_of_device');
+    $new_data['quantity_of_device'] = $new_qty;
+    if (!empty($new_data['equipments']) && isset($new_data['equipments'][0]) && is_array($new_data['equipments'][0])) {
+      $new_data['equipments'][0]['quantity_of_device'] = $new_qty;
+    }
+
+    // Set/update location (custom entry point) similarly at both levels.
+    $new_loc = (string) $form_state->getValue('custom_entry_point');
+    $new_data['custom_entry_point'] = $new_loc;
+    if (!empty($new_data['equipments']) && isset($new_data['equipments'][0]) && is_array($new_data['equipments'][0])) {
+      $new_data['equipments'][0]['custom_entry_point'] = $new_loc;
+    }
 
     // For repeat applications, fee is waived.
     $new_data['fee'] = '$0';

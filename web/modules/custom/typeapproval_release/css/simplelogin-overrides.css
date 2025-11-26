@@ -1,0 +1,9 @@
+.simplelogin-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.simplelogin-logo img {
+  width: 100px;
+}

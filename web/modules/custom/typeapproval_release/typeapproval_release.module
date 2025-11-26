@@ -654,3 +654,27 @@ function typeapproval_release_user_presave(UserInterface $account) {
   // Assign the role; no explicit save needed in presave hook.
   $account->addRole('applicant');
 }
+
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Attach custom CSS for Simplelogin login/register pages to adjust logo layout.
+ */
+function typeapproval_release_preprocess_html(array &$variables) {
+  // If Simplelogin module marked this page, attach our overrides.
+  if (!empty($variables['attributes']['class']) && in_array('simplelogin', $variables['attributes']['class'])) {
+    $variables['#attached']['library'][] = 'typeapproval_release/simplelogin_overrides';
+    return;
+  }
+  // Also attach on core auth routes as a fallback.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $login_routes = [
+    'user.login',
+    'user.register',
+    'user.pass',
+  ];
+  if (in_array($route_name, $login_routes, TRUE)) {
+    $variables['#attached']['library'][] = 'typeapproval_release/simplelogin_overrides';
+  }
+}
