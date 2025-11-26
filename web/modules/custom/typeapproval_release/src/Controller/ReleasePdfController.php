@@ -33,9 +33,14 @@ class ReleasePdfController extends ControllerBase implements ContainerInjectionI
    */
   public function generate(WebformSubmissionInterface $webform_submission): Response
   {
-    // Ensure this is the expected webform.
+    // Ensure this is one of the supported webforms.
     $webform = $webform_submission->getWebform();
-    if (!$webform || $webform->id() !== 'type_approval_application_form') {
+    $allow_webforms = [
+      'type_approval_application_form',
+      'type_approval_application_form_i',
+      'type_approval_application_form_l',
+    ];
+    if (!$webform || !in_array($webform->id(), $allow_webforms, true)) {
       throw new AccessDeniedHttpException('Unsupported webform.');
     }
 
@@ -65,11 +70,15 @@ class ReleasePdfController extends ControllerBase implements ContainerInjectionI
       'manufacturer' => $data['manufacturer'] ?? '',
       'model' => $data['model'] ?? '',
       'product_name' => $data['product_name'] ?? '',
+      'brand' => $data['brand'] ?? '',
+      'category' => $data['category'] ?? ($data['type_of_device'] ?? ''),
       'origin' => $data['origin'] ?? '',
       'frequency_range' => $data['frequency_range'] ?? '',
       'itu_emission_code' => $data['itu_emission_code'] ?? '',
       'modulation' => $data['modulation'] ?? '',
       'power_output' => $data['power_output'] ?? '',
+      'voltage' => $data['voltage'] ?? '',
+      'certification_standard' => $data['certification_standard'] ?? ($data['itu_emission_code'] ?? ''),
       'intended_use' => $data['intended_use_in_kiribati_select'] ?? '',
       'quantity_of_device' => $data['quantity_of_device'] ?? '',
     ];
@@ -84,10 +93,38 @@ class ReleasePdfController extends ControllerBase implements ContainerInjectionI
       'sign_image' => $this->toDataUri($signPath, 'image/jpeg'),
     ];
 
+    // Normalize devices list for templates that expect multiple rows.
+    $devices = [];
+    if (!empty($data['equipments']) && is_array($data['equipments'])) {
+      foreach ($data['equipments'] as $eq) {
+        $devices[] = [
+          'type_of_device' => $eq['type_of_device'] ?? '',
+          'manufacturer' => $eq['manufacturer'] ?? '',
+          'model' => $eq['model'] ?? '',
+          'quantity_of_device' => $eq['quantity_of_device'] ?? '',
+        ];
+      }
+    }
+    else {
+      $devices[] = [
+        'type_of_device' => $device['type_of_device'] ?? '',
+        'manufacturer' => $device['manufacturer'] ?? '',
+        'model' => $device['model'] ?? '',
+        'quantity_of_device' => $device['quantity_of_device'] ?? '',
+      ];
+    }
+
+    // Determine which template to use.
+    $theme_id = ($webform->id() === 'type_approval_application_form_i')
+      ? 'typeapproval_release_international_pdf'
+      : 'typeapproval_release_pdf';
+    $orientation = ($webform->id() === 'type_approval_application_form_i') ? 'landscape' : 'portrait';
+
     $build = [
-      '#theme' => 'typeapproval_release_pdf',
+      '#theme' => $theme_id,
       '#webform_submission' => $webform_submission,
       '#applicant' => $applicant,
+      '#devices' => $devices,
       '#device' => $device,
       '#generated_on' => \Drupal::service('date.formatter')->format(\Drupal::time()->getRequestTime(), 'custom', 'Y-m-d H:i'),
       '#assets' => $assets,
@@ -101,7 +138,7 @@ class ReleasePdfController extends ControllerBase implements ContainerInjectionI
     $options->set('defaultPaperSize', 'a4');
     $dompdf = new Dompdf($options);
     $dompdf->loadHtml($html);
-    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->setPaper('A4', $orientation);
     $dompdf->render();
 
     $filename = 'release-form-' . $webform_submission->id() . '.pdf';

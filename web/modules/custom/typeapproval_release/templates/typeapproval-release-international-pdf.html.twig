@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Type Approval Certificate (International)</title>
+  <style>
+    /* Force explicit landscape size to avoid Dompdf defaults */
+    @page { size: 297mm 210mm; margin: 12mm; }
+    html, body { margin:0; padding:0; }
+    body { font-family: Cambria, Georgia, "Times New Roman", Times, serif; color: #111; font-size: 12pt; }
+
+    /* Frame border similar to the sample image */
+    .frame { position: relative; min-height: 182mm; padding: 12mm; border: 5px double #7aa03b; }
+    .frame:after { content:''; position:absolute; inset:3mm; border: 2px solid #7aa03b; }
+    .content { position: relative; z-index: 2; }
+
+    /* Header */
+    .logo-wrap { text-align:center; margin: 8mm 0 4mm 0; }
+    .logo { display:inline-block; height: 24mm; }
+    .title-org { text-align:center; font-weight:700; font-size: 18pt; }
+    .title-cert { text-align:center; font-weight:700; font-size: 14pt; margin-top: 2mm; }
+    .subtitle { text-align:center; font-size: 10pt; margin-bottom: 2mm; }
+    .dotline { border-top: 2px dotted #333; margin: 2mm auto 4mm auto; width: 90%; }
+
+    /* Utility */
+    .row { margin: 3mm 0; }
+    .right { float:right; }
+    .hl { background: #fff59d; padding: 0 2mm; }
+    .muted { color: #444; }
+
+    /* Certificate info */
+    .info { display:flex; justify-content: space-between; margin: 6mm 0; }
+    .info .left, .info .right { font-size: 11pt; }
+
+    /* Product details table */
+    table { width:100%; border-collapse: collapse; margin: 6mm 0; table-layout: fixed; }
+    th, td { border:1px solid #000; padding: 3.5mm; vertical-align: top; }
+    th { text-align:center; background:#f5f5f5; font-weight:700; }
+    .w25 { width: 32%; }
+
+    .section-title { text-align:center; font-weight:700; margin-top: 3mm; }
+
+    .pagebreak { page-break-after: always; }
+
+    .sign { position: absolute; right: 30mm; bottom: 22mm; text-align:center; }
+    .sign img { height: 42mm; }
+  </style>
+</head>
+<body>
+  <!-- Page 1 -->
+  <div class="frame">
+    <div class="content">
+      {% if assets.logo_image %}
+        <div class="logo-wrap"><img class="logo" src="{{ assets.logo_image }}" alt="CCK"/></div>
+      {% endif %}
+      <div class="title-org">Communications Commission of Kiribati</div>
+      <div class="title-cert">TYPE APPROVAL CERTIFICATE</div>
+      <div class="subtitle">(Rule 15 of Type Approval Rules made under Section 61 and 62 of the Communications Act)</div>
+      <div class="dotline"></div>
+
+      <div class="info">
+        <div class="left">Certificate Number: <span class="hl">C{{ '%03d'|format(webform_submission.id()) }}</span></div>
+        <div class="right">Date of Issue: <span class="hl">{{ "now"|date('d/m/y') }}</span></div>
+      </div>
+
+      <div class="row">
+        This Type Approval Certificate certifies that the undernoted product meets the requirements of the Commission's Type Approval Rules and is duly issued to:
+      </div>
+
+      <div class="row" style="text-align:center; font-weight:700;">Certificate Holder information:</div>
+      <div class="row"><strong>Applicant Name:</strong> <span class="hl">{{ applicant.full_name ?: applicant.organization }}</span></div>
+      <div class="row"><strong>Physical Address:</strong> <span class="hl">{{ applicant.physical_address }}</span></div>
+
+      <table>
+        <tr>
+          <th colspan="2" style="text-align:center; background:#fff; border: none; padding-bottom: 2mm; font-size: 12pt;">Product Details</th>
+        </tr>
+        <tr>
+          <td class="w25"><strong>Product Name</strong></td>
+          <td><span class="hl">{{ device.product_name ?: device.model ?: devices|first.model }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Model</strong></td>
+          <td><span class="hl">{{ device.model ?: devices|first.model }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Brand</strong></td>
+          <td><span class="hl">{{ device.brand }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Category</strong></td>
+          <td><span class="hl">{{ device.category }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Manufacturer</strong></td>
+          <td><span class="hl">{{ device.manufacturer }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Country of Origin</strong></td>
+          <td><span class="hl">{{ device.origin }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Frequency Range</strong></td>
+          <td><span class="hl">{{ device.frequency_range }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Power Output</strong></td>
+          <td><span class="hl">{{ device.power_output }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Voltage</strong></td>
+          <td><span class="hl">{{ device.voltage }}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Certification Standard</strong></td>
+          <td><span class="hl">{{ device.certification_standard }}</span></td>
+        </tr>
+      </table>
+
+      <div class="pagebreak"></div>
+
+      <!-- Page 2 -->
+      <div class="title-org" style="margin-top:8mm;">Compliance Detail:</div>
+      <div class="row">
+        This certificate confirms that the product identified above has been tested and found to comply with the requirements of the relevant regulations and standards. The product is approved for sale and use in the Republic of Kiribati.
+      </div>
+
+      <div class="row" style="font-weight:700;">Conditions of Approval:</div>
+      <div class="row">
+        <ol style="margin:0; padding-left: 6mm;">
+          <li>The certificate holder must ensure continuous compliance with the relevant standards and regulations.</li>
+          <li>The product must bear the appropriate type approval mark as specified by the Communications Commission of Kiribati.</li>
+          <li>Any modifications to the product must be notified to the issuing authority for further evaluation and approval.</li>
+          <li>The certificate holder must maintain records of all products manufactured or imported under this certificate and provide them upon request.</li>
+        </ol>
+      </div>
+
+      <div class="row" style="margin-top:10mm; text-align:center;">
+        <strong>THIS CERTIFICATE</strong> shall be valid for all batches of a given type of product specified above, and remains in force as long as the product complies with Rule 2 or cancelled in pursuant to Rule 21 of the Type Approval Rules.
+      </div>
+
+      <div class="sign">
+        {% if assets.sign_image %}
+          <img src="{{ assets.sign_image }}" alt="Sign"/>
+        {% endif %}
+        <div class="muted">For Chief Executive officer<br/>Communications Commission of Kiribati</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
