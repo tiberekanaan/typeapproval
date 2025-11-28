@@ -52,6 +52,11 @@ class RequestNewReleaseForm extends FormBase {
       return $form;
     }
 
+    // Determine if the parent submission is for the local form (L) or international (I).
+    $webform = $this->parentSubmission->getWebform();
+    $form_id = $webform ? $webform->id() : '';
+    $is_local = ($form_id === 'type_approval_application_form_l');
+
     // Display device/applicant details read-only for confirmation (following provided sample).
     // Build a mapping in the desired order so labels are clean and values come from submission data.
     $summary_map = [
@@ -87,6 +92,11 @@ class RequestNewReleaseForm extends FormBase {
       'type_of_device' => 'Type of device',
       'website' => 'Website',
     ];
+
+    // For international form, do not include custom entry point in the summary.
+    if (!$is_local) {
+      unset($summary_map['custom_entry_point']);
+    }
 
     $items = [];
     foreach ($summary_map as $key => $label) {
@@ -136,21 +146,23 @@ class RequestNewReleaseForm extends FormBase {
       '#required' => TRUE,
     ];
 
-    // Location selection (same options as original form).
-    $existing_location = $data['custom_entry_point'] ?? ($data['equipments'][0]['custom_entry_point'] ?? '');
-    $form['custom_entry_point'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Location of Parcel'),
-      '#required' => TRUE,
-      '#options' => [
-        'Customs Betio' => $this->t('Customs Betio'),
-        'Customs Bonriki' => $this->t('Customs Bonriki'),
-        'DHL Tobaraoi' => $this->t('DHL Tobaraoi'),
-        'Postal Office Bairiki' => $this->t('Postal Office Bairiki'),
-      ],
-      '#default_value' => $existing_location,
-      '#description' => $this->t('Select where the item will be collected or is currently located.'),
-    ];
+    // Location selection (same options as original form) — applies to LOCAL form only.
+    if ($is_local) {
+      $existing_location = $data['custom_entry_point'] ?? ($data['equipments'][0]['custom_entry_point'] ?? '');
+      $form['custom_entry_point'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Location of Parcel'),
+        '#required' => TRUE,
+        '#options' => [
+          'Customs Betio' => $this->t('Customs Betio'),
+          'Customs Bonriki' => $this->t('Customs Bonriki'),
+          'DHL Tobaraoi' => $this->t('DHL Tobaraoi'),
+          'Postal Office Bairiki' => $this->t('Postal Office Bairiki'),
+        ],
+        '#default_value' => $existing_location,
+        '#description' => $this->t('Select where the item will be collected or is currently located.'),
+      ];
+    }
 
     // Hidden to pass parent SID.
     $form['parent_sid'] = [
@@ -186,9 +198,17 @@ class RequestNewReleaseForm extends FormBase {
     if ($qty < 1) {
       $form_state->setErrorByName('quantity_of_device', $this->t('Quantity must be at least 1.'));
     }
-    $location = (string) $form_state->getValue('custom_entry_point');
-    if ($location === '') {
-      $form_state->setErrorByName('custom_entry_point', $this->t('Please select the location of the item.'));
+
+    // Only validate location of parcel for local form.
+    $webform = $this->parentSubmission ? $this->parentSubmission->getWebform() : NULL;
+    $form_id = $webform ? $webform->id() : '';
+    $is_local = ($form_id === 'type_approval_application_form_l');
+
+    if ($is_local) {
+      $location = (string) $form_state->getValue('custom_entry_point');
+      if ($location === '') {
+        $form_state->setErrorByName('custom_entry_point', $this->t('Please select the location of the item.'));
+      }
     }
   }
 
@@ -209,11 +229,23 @@ class RequestNewReleaseForm extends FormBase {
       $new_data['equipments'][0]['quantity_of_device'] = $new_qty;
     }
 
-    // Set/update location (custom entry point) similarly at both levels.
-    $new_loc = (string) $form_state->getValue('custom_entry_point');
-    $new_data['custom_entry_point'] = $new_loc;
-    if (!empty($new_data['equipments']) && isset($new_data['equipments'][0]) && is_array($new_data['equipments'][0])) {
-      $new_data['equipments'][0]['custom_entry_point'] = $new_loc;
+    // Set/update or remove location depending on form type.
+    $webform = $parent->getWebform();
+    $form_id = $webform ? $webform->id() : '';
+    $is_local = ($form_id === 'type_approval_application_form_l');
+    if ($is_local) {
+      $new_loc = (string) $form_state->getValue('custom_entry_point');
+      $new_data['custom_entry_point'] = $new_loc;
+      if (!empty($new_data['equipments']) && isset($new_data['equipments'][0]) && is_array($new_data['equipments'][0])) {
+        $new_data['equipments'][0]['custom_entry_point'] = $new_loc;
+      }
+    }
+    else {
+      // Ensure location is not carried over for international requests.
+      unset($new_data['custom_entry_point']);
+      if (!empty($new_data['equipments']) && isset($new_data['equipments'][0]) && is_array($new_data['equipments'][0])) {
+        unset($new_data['equipments'][0]['custom_entry_point']);
+      }
     }
 
     // For repeat applications, fee is waived.

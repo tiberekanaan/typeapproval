@@ -182,7 +182,14 @@ settings:
   submission_excluded_elements: {  }
   submission_exclude_empty: false
   submission_exclude_empty_checkbox: false
-  submission_views: {  }
+  submission_views:
+    pass_submissions:
+      title: pass_submissions
+      view: 'webform_submissions:embed_1'
+      webform_routes:
+        - entity.webform.results_submissions
+        - entity.webform.user.submissions
+      node_routes: {  }
   submission_views_replace: {  }
   submission_user_columns: {  }
   submission_user_duplicate: false
@@ -257,7 +264,7 @@ settings:
   purge_days: null
   results_disabled: false
   results_disabled_ignore: false
-  results_customize: false
+  results_customize: true
   token_view: false
   token_update: false
   token_delete: false

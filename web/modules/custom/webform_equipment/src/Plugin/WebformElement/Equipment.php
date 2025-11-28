@@ -5,6 +5,7 @@ namespace Drupal\webform_equipment\Plugin\WebformElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides an 'equipment' composite element.
@@ -247,6 +248,81 @@ class Equipment extends WebformCompositeBase {
     // Fallback: flatten nested structures and return the leaf by key.
     $flattened = WebformElementHelper::getFlattened($composite_elements);
     return $flattened[$composite_key] ?? NULL;
+  }
+
+  /**
+   * Flattened iteration so nested sub-elements display on submissions.
+   */
+  protected function formatCompositeHtmlItems(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $items = [];
+
+    $format = $this->getItemFormat($element);
+
+    // Iterate over all flattened sub-elements and render only leaves (non-containers).
+    $composite_elements = $element['#webform_composite_elements'] ?? [];
+    $composite_elements = WebformElementHelper::getFlattened($composite_elements);
+
+    foreach ($composite_elements as $composite_key => $composite_element) {
+      $is_container = FALSE;
+      if (isset($composite_element['#type'])) {
+        $plugin = $this->elementManager->getElementInstance($composite_element);
+        $is_container = $plugin->isContainer($composite_element);
+      }
+      // Skip sections/flexboxes and other containers; only print actual inputs.
+      if ($is_container) {
+        continue;
+      }
+
+      $composite_title = (isset($composite_element['#title']) && $format !== 'raw') ? $composite_element['#title'] : $composite_key;
+      $composite_value = $this->formatCompositeHtml($element, $webform_submission, ['composite_key' => $composite_key] + $options);
+      if ($composite_value !== '') {
+        // Output label and value for leaf inputs. Ignore container labels entirely.
+        $items[$composite_key] = [
+          '#type' => 'inline_template',
+          '#template' => '<b>{{ title }}:</b> {{ value }}',
+          '#context' => [
+            'title' => $composite_title,
+            'value' => $composite_value,
+          ],
+        ];
+      }
+    }
+    return $items;
+  }
+
+  /**
+   * Flattened iteration for text formatting as well.
+   */
+  protected function formatCompositeTextItems(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $items = [];
+
+    $format = $this->getItemFormat($element);
+
+    $composite_elements = $element['#webform_composite_elements'] ?? [];
+    $composite_elements = WebformElementHelper::getFlattened($composite_elements);
+
+    foreach ($composite_elements as $composite_key => $composite_element) {
+      // Only include leaf inputs; skip containers (sections/flexboxes).
+      $is_container = FALSE;
+      if (isset($composite_element['#type'])) {
+        $plugin = $this->elementManager->getElementInstance($composite_element);
+        $is_container = $plugin->isContainer($composite_element);
+      }
+      if ($is_container) {
+        continue;
+      }
+
+      $composite_title = (isset($composite_element['#title']) && $format !== 'raw') ? $composite_element['#title'] : $composite_key;
+      $composite_value = $this->formatCompositeText($element, $webform_submission, ['composite_key' => $composite_key] + $options);
+      if (is_array($composite_value)) {
+        $composite_value = $this->renderer->renderInIsolation($composite_value);
+      }
+      if ($composite_value !== '') {
+        // Output label and value for leaf inputs.
+        $items[$composite_key] = $composite_title . ': ' . (string) $composite_value;
+      }
+    }
+    return $items;
   }
 
   /**
