@@ -80,10 +80,12 @@
           <td><strong>Model</strong></td>
           <td><span>{{ device.model ?: devices|first.model }}</span></td>
         </tr>
+        {% if device.brand %}
         <tr>
           <td><strong>Brand</strong></td>
           <td><span>{{ device.brand }}</span></td>
         </tr>
+        {% endif %}
         <tr>
           <td><strong>Category</strong></td>
           <td><span>{{ device.category }}</span></td>
