@@ -48,35 +48,6 @@ function typeapproval_release_user_login(UserInterface $account): void {
 }
 
 /**
- * Add a Sign up button to the core user login form.
- */
-function typeapproval_release_form_user_login_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
-  // Only proceed if actions container exists.
-  if (!isset($form['actions']) || !is_array($form['actions'])) {
-    return;
-  }
-
-  // Ensure the register route exists; if not, do nothing.
-  try {
-    $url = Url::fromRoute('user.register');
-  }
-  catch (\Throwable $e) {
-    return;
-  }
-
-  // Add as a secondary button next to the Log in submit button.
-  $form['actions']['signup'] = [
-    '#type' => 'link',
-    '#title' => t('Sign up'),
-    '#url' => $url,
-    '#attributes' => [
-      'class' => ['button', 'button--secondary'],
-    ],
-    '#weight' => 100,
-  ];
-}
-
-/**
  * Enforce $0 fee and disable Fee field for repeat submissions.
  */
 function typeapproval_release_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
