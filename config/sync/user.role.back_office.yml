@@ -1,34 +1,42 @@
-uuid: 4adf37c8-a01c-4b64-afcd-d3ca433b03e6
+uuid: 9e215353-5321-4075-bce1-b93840c2528d
 langcode: en
 status: true
 dependencies:
   config:
     - node.type.approved_device
+    - node.type.page
     - workflows.workflow.basic_editorial
   module:
     - content_moderation
     - field_ui
     - navigation
     - node
+    - path
     - profile
     - system
-id: application_manager
-label: 'Application Manager'
-weight: 5
+id: back_office
+label: 'Back Office Admin'
+weight: 6
 is_admin: false
 permissions:
-  - 'access administration pages'
   - 'access content overview'
   - 'access navigation'
   - 'access profile overview'
   - 'access user profiles'
-  - 'administer actions'
+  - 'administer profile form display'
+  - 'administer url aliases'
   - 'administer user display'
   - 'administer user form display'
+  - 'administer users'
+  - 'cancel account'
+  - 'change own username'
   - 'create applicant profile'
   - 'create approved_device content'
+  - 'create page content'
+  - 'create url aliases'
   - 'delete any applicant profile'
   - 'delete any approved_device content'
+  - 'delete any page content'
   - 'delete own applicant profile'
   - 'delete own approved_device content'
   - 'edit any approved_device content'

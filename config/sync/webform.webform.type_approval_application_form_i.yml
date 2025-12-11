@@ -100,6 +100,10 @@ elements: |-
     reason_for_rejection:
       '#type': textarea
       '#title': 'Reason for rejection'
+      '#states':
+        visible:
+          ':input[name="status"]':
+            value: Rejected
       '#access_create_roles': {  }
       '#access_update_roles':
         - administrator
@@ -111,6 +115,10 @@ elements: |-
       '#type': number
       '#title': Fee
       '#field_prefix': $
+      '#states':
+        visible:
+          ':input[name="status"]':
+            value: Approved
 css: ''
 javascript: ''
 settings:
@@ -152,6 +160,7 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: '100 MB'
+  form_file_limit_message: ''
   form_attributes: {  }
   form_method: ''
   form_action: ''
@@ -254,7 +263,6 @@ settings:
   token_update: false
   token_delete: false
   serial_disabled: false
-  form_file_limit_message: ''
 access:
   create:
     roles:
@@ -346,9 +354,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_1:
     id: email
     handler_id: email_1
@@ -384,9 +392,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_2:
     id: email
     handler_id: email_2
@@ -416,7 +424,7 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: 'Type Approval Application Approved'
-      body: '<p>Dear [webform_submission:user],</p><p>Your application has been reviewed and now pending approval subject to the payment of the fee. Please pay the fee via bank transfer or Internet Banking App.</p><p>+------------------------------------------------------+</p><p>Account Details:</p><p>Bank: ANZ Bank (Kiribati) Limited</p><p>Address: Main Street, Bairiki, Tarawa, Kiribati</p><p>Swift: BKIRKIKI</p><p>Account Name: Communications Commission of Kiribati</p><p>Account Number: 1111111</p><p>Amount Due: [webform_submission:values:fee]</p><p>+------------------------------------------------------+</p><p>After you make the payment, please respond to this email attaching the proof such as the screenshot of the transaction or bank telegraphic transfer reference number.</p><p>Once we confirm the payment, you will receive the release form for your items.</p><p>Thank you.</p>'
+      body: '<p>Dear [webform_submission:user],</p><p>Your application has been reviewed and now pending approval subject to the payment of the fee. Please pay the fee via bank transfer or Internet Banking App.</p><p>+------------------------------------------------------+</p><p>Account Details:</p><p>Bank: ANZ Bank (Kiribati) Limited</p><p>Address: Main Street, Bairiki, Tarawa, Kiribati</p><p>Swift: BKIRKIKI</p><p>Account Name: Communications Commission of Kiribati</p><p>Account Number: 1146450</p><p>Amount Due: [webform_submission:values:fee]</p><p>+------------------------------------------------------+</p><p>After you make the payment, please respond to this email attaching the proof such as the screenshot of the transaction or bank telegraphic transfer reference number.</p><p>Once we confirm the payment, you will receive the release form for your items.</p><p>Thank you.</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -426,9 +434,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_3:
     id: email
     handler_id: email_3
@@ -468,9 +476,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_4:
     id: email
     handler_id: email_4
@@ -509,7 +517,7 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
 variants: {  }

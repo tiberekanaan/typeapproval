@@ -167,6 +167,7 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: '100 MB'
+  form_file_limit_message: ''
   form_attributes: {  }
   form_method: ''
   form_action: ''
@@ -269,7 +270,6 @@ settings:
   token_update: false
   token_delete: false
   serial_disabled: false
-  form_file_limit_message: ''
 access:
   create:
     roles:
@@ -361,9 +361,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_1:
     id: email
     handler_id: email_1
@@ -399,9 +399,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_2:
     id: email
     handler_id: email_2
@@ -441,9 +441,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_3:
     id: email
     handler_id: email_3
@@ -483,9 +483,9 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
   email_4:
     id: email
     handler_id: email_4
@@ -524,7 +524,7 @@ handlers:
       attachments: false
       twig: false
       theme_name: ''
+      langcode: ''
       parameters: {  }
       debug: false
-      langcode: ''
 variants: {  }

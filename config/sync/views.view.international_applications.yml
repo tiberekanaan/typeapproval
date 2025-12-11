@@ -3,8 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - webform.webform.type_approval_application_form
+    - user.role.administrator
+    - user.role.application_manager
+    - webform.webform.type_approval_application_form_i
   module:
+    - user
     - webform
     - webform_views
 id: international_applications
@@ -23,187 +26,15 @@ display:
     display_options:
       title: 'International Applications '
       fields:
-        sid:
-          id: sid
-          table: webform_submission
-          field: sid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: webform_submission
-          entity_field: sid
-          plugin_id: field
-          label: 'Application ID'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_integer
-          settings:
-            thousand_separator: ''
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        webform_submission_value_1:
-          id: webform_submission_value_1
-          table: webform_submission_field_type_approval_application_form_individual_or_organization
-          field: webform_submission_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: webform_submission_field
-          label: Applicant
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          webform_element_format: value
-          webform_multiple_value: true
-          webform_multiple_delta: 0
-          webform_check_access: 0
-        webform_submission_value_2:
-          id: webform_submission_value_2
-          table: webform_submission_field_type_approval_application_form_type_of_device
-          field: webform_submission_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: webform_submission_field
-          label: 'Type of Device'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          webform_element_format: value
-          webform_multiple_value: true
-          webform_multiple_delta: 0
-          webform_check_access: 0
         webform_submission_value:
           id: webform_submission_value
-          table: webform_submission_field_type_approval_application_form_have_you_review_the_list_of_approved_devices
+          table: webform_submission_field_type_approval_application_form_i_full_name
           field: webform_submission_value
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: webform_submission_field
-          label: 'Device Already Approved'
+          label: 'Full Name'
           exclude: false
           alter:
             alter_text: false
@@ -248,9 +79,62 @@ display:
           webform_multiple_value: true
           webform_multiple_delta: 0
           webform_check_access: 1
-        webform_submission_value_3:
-          id: webform_submission_value_3
-          table: webform_submission_field_type_approval_application_form_status
+        webform_submission_value_1:
+          id: webform_submission_value_1
+          table: webform_submission_field_type_approval_application_form_i_organization
+          field: webform_submission_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: webform_submission_field
+          label: 'Organization or Company'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          webform_element_format: value
+          webform_multiple_value: true
+          webform_multiple_delta: 0
+          webform_check_access: 1
+        webform_submission_value_2:
+          id: webform_submission_value_2
+          table: webform_submission_field_type_approval_application_form_i_status
           field: webform_submission_value
           relationship: none
           group_type: group
@@ -300,7 +184,7 @@ display:
           webform_element_format: value
           webform_multiple_value: true
           webform_multiple_delta: 0
-          webform_check_access: 0
+          webform_check_access: 1
         operations:
           id: operations
           table: webform_submission
@@ -310,7 +194,7 @@ display:
           admin_label: ''
           entity_type: webform_submission
           plugin_id: entity_operations
-          label: Actions
+          label: 'Operations links'
           exclude: false
           alter:
             alter_text: false
@@ -367,8 +251,11 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            administrator: administrator
+            application_manager: application_manager
       cache:
         type: tag
         options: {  }
@@ -393,23 +280,15 @@ display:
           id: webform_id
           table: webform_submission
           field: webform_id
-          entity_type: webform_submission
-          entity_field: webform_id
-          plugin_id: bundle
-          value:
-            type_approval_application_form: type_approval_application_form
-          group: 1
-        webform_submission_value:
-          id: webform_submission_value
-          table: webform_submission_field_type_approval_application_form_type_of_applicant
-          field: webform_submission_value
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: webform_submission_select_filter
+          entity_type: webform_submission
+          entity_field: webform_id
+          plugin_id: bundle
           operator: in
           value:
-            'International Customer': 'International Customer'
+            type_approval_application_form_i: type_approval_application_form_i
           group: 1
           exposed: false
           expose:
@@ -439,9 +318,9 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        webform_submission_value_3:
-          id: webform_submission_value_3
-          table: webform_submission_field_type_approval_application_form_status
+        webform_submission_value:
+          id: webform_submission_value
+          table: webform_submission_field_type_approval_application_form_i_status
           field: webform_submission_value
           relationship: none
           group_type: group
@@ -452,92 +331,14 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: webform_submission_value_3_op
-            label: Status
+            operator_id: webform_submission_value_op
+            label: 'Filter by Status'
             description: ''
             use_operator: false
-            operator: webform_submission_value_3_op
+            operator: webform_submission_value_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: webform_submission_value_3
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        webform_submission_value_1:
-          id: webform_submission_value_1
-          table: webform_submission_field_type_approval_application_form_type_of_device
-          field: webform_submission_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: webform_submission_select_filter
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: webform_submission_value_1_op
-            label: 'Device Type '
-            description: ''
-            use_operator: false
-            operator: webform_submission_value_1_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: webform_submission_value_1
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        webform_submission_value_2:
-          id: webform_submission_value_2
-          table: webform_submission_field_type_approval_application_form_have_you_review_the_list_of_approved_devices
-          field: webform_submission_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: webform_submission_select_filter
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: webform_submission_value_2_op
-            label: 'Device Approved'
-            description: ''
-            use_operator: false
-            operator: webform_submission_value_2_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: webform_submission_value_2
+            identifier: webform_submission_value
             required: false
             remember: false
             multiple: false
@@ -627,10 +428,10 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - user
+        - user.roles
       tags: {  }
   page_1:
     id: page_1
@@ -652,8 +453,8 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - user
+        - user.roles
       tags: {  }

@@ -83,6 +83,7 @@
         "drupal/project_browser": "^2.1-beta2",
         "drupal/recipe_installer_kit": "^1-alpha6@alpha",
         "drupal/redirect": "^1.10",
+        "drupal/registration_role": "^2.0",
         "drupal/robotstxt": "^1.6",
         "drupal/sam": "^1.2",
         "drupal/scheduler": "^2.2",

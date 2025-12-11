@@ -9,8 +9,11 @@ label: Applicant
 weight: 4
 is_admin: false
 permissions:
+  - 'access profile overview'
   - 'create applicant profile'
+  - 'delete any applicant profile'
   - 'delete own applicant profile'
+  - 'update any applicant profile'
   - 'update own applicant profile'
   - 'view own applicant profile'
   - 'view own profile'
